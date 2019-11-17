@@ -1,0 +1,258 @@
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  Dimensions,
+  Modal,
+  ScrollView
+} from 'react-native';
+
+export default class Users extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalVisible:false,
+      userSelected:[],
+      data: [
+        {id:1,  name: "Carrot",     strength:"10px",               image:"data:image/png;base64,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", about:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo."},
+        {id:2,  name: "Sword",      strength:"100px",               image:"https://bootdey.com/img/Content/avatar/avatar1.png", about:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo."},
+        {id:3,  name: "Parang",     strength:"Creative designer", image:"https://bootdey.com/img/Content/avatar/avatar6.png", about:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo."} ,
+        {id:4,  name: "Pillow",     strength:"Front-end dev",     image:"https://bootdey.com/img/Content/avatar/avatar5.png", about:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo."} ,
+        {id:5,  name: "Srick Tree", strength:"Backend-end dev",   image:"https://bootdey.com/img/Content/avatar/avatar4.png", about:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo."} ,
+        {id:6,  name: "John Doe",   strength:"Creative designer", image:"https://bootdey.com/img/Content/avatar/avatar3.png", about:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo."} ,
+        {id:7,  name: "John Doe",   strength:"Manager",           image:"https://bootdey.com/img/Content/avatar/avatar2.png", about:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo."} ,
+        {id:8,  name: "John Doe",   strength:"IOS dev",           image:"https://bootdey.com/img/Content/avatar/avatar1.png", about:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo."} ,
+        {id:9,  name: "John Doe",   strength:"Web dev",           image:"https://bootdey.com/img/Content/avatar/avatar4.png", about:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo."} ,
+        {id:10, name: "John Doe",   strength:"Analyst",           image:"https://bootdey.com/img/Content/avatar/avatar7.png", about:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo."} ,
+      ]
+    };
+  }
+
+  clickEventListener = (item) => {
+    this.setState({userSelected: item}, () =>{
+      this.setModalVisible(true);
+    });
+  }
+
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+          
+        <FlatList 
+          style={styles.userList}
+          columnWrapperStyle={styles.listContainer}
+          data={this.state.data}
+          keyExtractor= {(item) => {
+            return item.id;
+          }}
+          renderItem={({item}) => {
+          return (
+            <TouchableOpacity style={styles.card} onPress={() => {this.clickEventListener(item)}}>
+              <Image style={styles.image} source={{uri: item.image}}/>
+              <View style={styles.cardContent}>
+                <Text style={styles.name}>{item.name}</Text>
+                <Text style={styles.strength}>{item.strength}</Text>
+                <TouchableOpacity style={styles.followButton} onPress={()=> this.clickEventListener(item)}>
+                  <Text style={styles.followButtonText}>View</Text>                  
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
+          )}}/>
+
+        <Modal
+          animationType={'fade'}
+          transparent={true}
+          onRequestClose={() => this.setModalVisible(false)}
+          visible={this.state.modalVisible}>
+
+          <View style={styles.popupOverlay}>
+            <View style={styles.popup}>
+              <View style={styles.popupContent}>
+                <ScrollView contentContainerStyle={styles.modalInfo}>
+                    <Image style={styles.image} source={{uri: this.state.userSelected.image}}/>
+                    <Text style={styles.name}>{this.state.userSelected.name}</Text>
+                    <Text style={styles.strength}>{this.state.userSelected.strength}</Text>
+                    <Text style={styles.about}>{this.state.userSelected.about}</Text>
+                </ScrollView>
+              </View>
+              <View style={styles.popupButtons}>
+                <TouchableOpacity onPress={() => {this.setModalVisible(false) }} style={styles.btnClose}>
+                  <Text style={styles.txtClose}>Close</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {this.setModalVisible(false) }} style={styles.btnEquip}>
+                  <Text style={styles.txtClose}>Equip</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {this.setModalVisible(false) }} style={styles.btnUneqip}>
+                  <Text style={styles.txtClose}>Unequip</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {this.setModalVisible(false) }} style={styles.btnSell}>
+                  <Text style={styles.txtClose}>Sell</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container:{
+    flex:1,
+    marginTop:20,
+    backgroundColor:"#eeeeee"
+  },
+  header:{
+    backgroundColor: "#00CED1",
+    height:200
+  },
+  headerContent:{
+    padding:30,
+    alignItems: 'center',
+    flex:1,
+  },
+  detailContent:{
+    top:80,
+    height:500,
+    width:Dimensions.get('screen').width - 90,
+    marginHorizontal:30,
+    flexDirection: 'row',
+    position:'absolute',
+    backgroundColor: "#ffffff"
+  },
+  userList:{
+    flex:1,
+  },
+  cardContent: {
+    marginLeft:20,
+    marginTop:10
+  },
+  image:{
+    width:90,
+    height:90,
+    borderRadius:45,
+  },
+
+
+
+  card:{
+    shadowColor: '#00000021',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.37,
+    shadowRadius: 7.49,
+    elevation: 12,
+
+    marginVertical: 10,
+    marginHorizontal:20,
+    backgroundColor:"white",
+    flexBasis: '46%',
+    padding: 10,
+    flexDirection:'row'
+  },
+
+  name:{
+    fontSize:18,
+    flex:1,
+    alignSelf:'center',
+    color:"#008080",
+    fontWeight:'bold'
+  },
+  position:{
+    fontSize:14,
+    flex:1,
+    alignSelf:'center',
+    color:"#696969"
+  },
+  about:{
+    marginHorizontal:10
+  },
+
+  followButton: {
+    marginTop:10,
+    height:35,
+    width:100,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius:30,
+    backgroundColor: "#00BFFF",
+  },
+  followButtonText:{
+    color: "#FFFFFF",
+    fontSize:20,
+  },
+ /************ modals ************/
+  popup: {
+    backgroundColor: 'white',
+    marginTop: 80,
+    marginHorizontal: 20,
+    borderRadius: 7,
+  },
+  popupOverlay: {
+    backgroundColor: "#00000057",
+    flex: 1,
+    marginTop: 30
+  },
+  
+  popupContent: {
+    //alignItems: 'center',
+    margin: 5,
+    height:250,
+  },
+  popupHeader: {
+    marginBottom: 45
+  },
+  popupButtons: {
+    marginTop: 15,
+    flexDirection: 'row',
+    borderTopWidth: 1,
+    borderColor: "#eee",
+    justifyContent:'center'
+  },
+  popupButton: {
+    flex: 1,
+    marginVertical: 16
+  },
+  btnClose:{
+    height:10,
+    backgroundColor:'blue',
+    padding:20
+  },
+  // btnEquip:{
+  //   height:20,
+  //   backgroundColor:'#20b2aa',
+  //   padding:20,
+  //   width: 90,
+  //   marginRight: 0, 
+  //   marginBottom:0,
+  // },
+  // btnSell:{
+  //   height:20,
+  //   backgroundColor:'#20b2aa',
+  //   padding:20,
+  //   width: 90,
+  // },
+  // btnUneqip:{
+  //   height:20,
+  //   backgroundColor:'#20b2aa',
+  //   padding:20,
+  //   width: 90,
+  // },
+  modalInfo:{
+    alignItems:'center',
+    justifyContent:'center',
+  }
+}); 

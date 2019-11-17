@@ -1,0 +1,98 @@
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow
+ * working with pop up but cannot show photo
+ */
+
+import React, { Component } from "react";
+import { Platform, StyleSheet, FlatList, Text, View, Alert } from "react-native";
+
+export default class HomeActivity extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      GridListItems: [
+        { "id":"1009","author":"Christopher Campbell","width":5000,"height":7502,"url":"https://unsplash.com/photos/CMWRIzyMKZk","download_url":"https://picsum.photos/id/1009/5000/7502" },
+        { key: "Sumit" },
+        { key: "Amit" },
+        { key: "React" },
+        { key: "React Native" },
+        { key: "Java" },
+        { key: "Javascript" },
+        { key: "PHP" },
+        { key: "AJAX" },
+        { key: "Android" },
+        { key: "Selenium" },
+        { key: "HTML" },
+        { key: "Database" },
+        { key: "MYSQL" },
+        { key: "SQLLite" },
+        { key: "Web Technology" },
+        { key: "CSS" },
+        { key: "Python" },
+        { key: "Linux" },
+        { key: "Kotlin" },
+      ]
+    };
+  }
+
+  GetGridViewItem(item) {
+    Alert.alert(
+      'Inventory Alert',
+      (item),
+      [
+        {text: 'Sell', onPress: () => console.warn('Sell')},
+        {text: 'Equip', onPress: () => console.warn('Equip')},
+        {text: 'Unequip', onPress: () => console.warn('Unequip')},
+      ]
+    );
+  }
+
+  render() {
+     return (
+       <View style={styles.container}>
+         <FlatList
+            data={ this.state.GridListItems }
+            renderItem={ ({item}) =>
+              <View style={styles.GridViewContainer}>
+               <Text style={styles.GridViewTextLayout} onPress={this.GetGridViewItem.bind(this, item.author)} > {item.author} </Text>
+              </View> }
+            numColumns={2}
+         />
+       </View>
+    );
+  }
+
+}
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "#e5e5e5"
+  },
+  headerText: {
+    fontSize: 20,
+    textAlign: "center",
+    margin: 10,
+    fontWeight: "bold"
+  },
+  GridViewContainer: {
+   flex:1,
+   justifyContent: 'center',
+   alignItems: 'center',
+   height: 100,
+   margin: 5,
+   backgroundColor: '#7B1FA2'
+},
+GridViewTextLayout: {
+   fontSize: 20,
+   fontWeight: 'bold',
+   justifyContent: 'center',
+   color: '#fff',
+   padding: 10,
+ }
+});
