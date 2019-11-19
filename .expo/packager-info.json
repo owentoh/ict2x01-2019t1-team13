@@ -1,0 +1,10 @@
+{
+  "expoServerPort": 19000,
+  "packagerPort": 19004,
+  "packagerPid": 17544,
+  "expoServerNgrokUrl": "https://8r-qmk.owentoh.walk.exp.direct",
+  "packagerNgrokUrl": "https://packager.8r-qmk.owentoh.walk.exp.direct",
+  "ngrokPid": 12516,
+  "webpackServerPort": null,
+  "devToolsPort": 19003
+}

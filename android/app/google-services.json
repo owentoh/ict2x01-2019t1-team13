@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "939704801477",
+    "firebase_url": "https://walk-df0f7.firebaseio.com",
+    "project_id": "walk-df0f7",
+    "storage_bucket": "walk-df0f7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939704801477:android:c8d00f20dbdd92dba838ac",
+        "android_client_info": {
+          "package_name": "com.walk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "939704801477-rttst2p5sokonfmf2r6en6cberap3j92.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHiNuZPvm5XlU4Q0zwNcPRRSkbiNEF8JM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "939704801477-rttst2p5sokonfmf2r6en6cberap3j92.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
