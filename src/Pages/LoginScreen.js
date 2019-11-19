@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 
 
-import { Actions } from 'react-native-router-flux';
 import firebase from 'firebase';
 import "@firebase/firestore";
 import { withNavigation} from 'react-navigation';
@@ -52,7 +51,6 @@ class LoginScreen extends Component {
       Address: '',
       DOB: '',
       Name: '',
-      //UserData: props.UserProvider.UserData
     };
   }
 
@@ -68,16 +66,8 @@ class LoginScreen extends Component {
     this.setState({ Email })
   };
 
-  Mainpage(){
-    Actions.Mainpage()
-  }
-
-  setName = (test) => {
-    this.props.userProvider.setContextData(test);
-  }
-
-  setUser = (test) => {
-   this.props.userProvider.setUserDetails(test);
+  setName = (name) => {
+    this.props.userProvider.setContextData(name);
   }
 
   handleSubmit = values => {
@@ -175,15 +165,10 @@ class LoginScreen extends Component {
                   <Text>Sign Up</Text>
                 </TouchableOpacity>
 
-              <TouchableOpacity style={styles.button} //tester 
-              onPress = {this.setName}>
-              <Text>change name</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.button} //tester 
-              onPress = {this.setName}>
-                <Text>{this.props.userProvider.contextData}</Text>
-              </TouchableOpacity>
+                <TouchableOpacity style={styles.button} //tester 
+                  onPress={() => this.setName("admin")}>
+                  <Text>{this.props.userProvider.contextData}</Text>
+                </TouchableOpacity>
 
 
 

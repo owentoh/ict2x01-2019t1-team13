@@ -12,17 +12,13 @@ import {
   Image,
   Alert
 } from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import { TextInputMask } from 'react-native-masked-text';
 import firebase from 'firebase'
-import { ScrollView } from 'react-native-gesture-handler';
 import {UserProvider,withUserContext} from './userContext';
 
 require("firebase/firestore");
 
 class Shop extends Component {
   static contextType = UserProvider;
-
 
   constructor(props) {
     super(props);
@@ -31,14 +27,8 @@ class Shop extends Component {
       price: 1,
       equipmentList : [],
       loading: true,
-      contextData: props.userProvider.contextData,
-      stepCount: props.userProvider.stepCount,
-      journeyStarted: props.userProvider.journeyStarted
-
-
     }
   }
-
 
   async componentDidMount(){
 
@@ -53,24 +43,22 @@ class Shop extends Component {
     }.bind(this));
   }
 
-    renderEquipment = (data) => {
-      return <TouchableOpacity style= {{backgroundColor: 'blue'}} onPress={()=>this.purchaseEquipment("tester2", data.item.name)}>
-        <View style={styles.listItemContainer}>
-          <Image source={require("../Images/plasticsword.png")} styles={styles.pokeImage}/>
-          <Text style={styles.pokeItemHeader}>{data.item.name}</Text>
-          <Text>{this.props.userProvider.contextData}</Text>
-          <Text>Cost: {data.item.cost} Runes</Text>
-          
-          <Text>Damage: {data.item.damage}</Text>
-          
-        </View>
-      </TouchableOpacity>
-    }
+  renderEquipment = (data) => {
+    return <TouchableOpacity style={{ backgroundColor: '#433a64' }} onPress={() => this.purchaseEquipment("Toh_jin_wen@hotmail.com", data.item.name)}>
+      <View style={styles.listItemContainer}>
+        <Image source={require("../Images/plasticsword.png")} styles={styles.equipmentImage} />
+        <Text style={styles.itemHeader}>{data.item.name}</Text>
+        <Text>Cost: {data.item.cost} Runes</Text>
+        <Text>Damage: {data.item.damage}</Text>
 
-  purchaseEquipment = (username, equipment) => {
+      </View>
+    </TouchableOpacity>
+  }
+
+  purchaseEquipment = (email, equipment) => {
       //this.checkRunes();
       const db = firebase.firestore();
-      const docUserProfile = db.collection("Profile").doc(username);
+      const docUserProfile = db.collection("Game").doc(email);
       docUserProfile.get().then(doc => this.setState({ runes: doc.data().Runes }));
 
       //this.getEquipmentPrice();
@@ -150,22 +138,13 @@ class Shop extends Component {
     });
   }
 
-
   showPurchaseSuccess = (text) => {
     Alert.alert(text);
   }
 
-
   showPurchaseFail = (text) => {
     Alert.alert(text);
   }
-
-
-  //for navigating back to login page
-  Login() {
-    Actions.Login()
-  }
-
 
 
   render() {
@@ -176,70 +155,10 @@ class Shop extends Component {
           renderItem={this.renderEquipment}
           keyExtractor={(item) => item.name} 
           />)
-        // <TouchableOpacity style={styles.button} //Log in
-        //            onPress={this.listOfEquipment}>
-        //            <Text>list of equipment</Text>
-        //          </TouchableOpacity>)
       }
       else {
         return (<ActivityIndicator/>)
       }
-
-
-      //  <ScrollView style={styles.screen}>
-      //    <View>
-      //      <Text>
-      //        {this.state.runes}
-      //        {this.listOfEquipment()}
-      //      </Text>
-            
-      //    </View>
-      //  </ScrollView>
-
-    //   <KeyboardAvoidingView style={styles.container} //avoid being blocked 
-    //     behavior="padding">
-    //     <View style={styles.container}>
-
-    //       <Text style={styles.welcome}>Equipment shop</Text>
-    //       <TouchableOpacity style={styles.button} //Log in
-    //         onPress={this.minusRunes}>
-    //         <Text>Minus Runes</Text>
-    //       </TouchableOpacity>
-
-    //       <TouchableOpacity style={styles.button} //Log in
-    //         onPress={this.checkRunes}>
-    //         <Text>check Runes</Text>
-    //       </TouchableOpacity>
-
-    //       <TouchableOpacity style={styles.button} //Log in
-    //         onPress={this.listOfEquipment}>
-    //         <Text>list of equipment</Text>
-    //       </TouchableOpacity>
-
-    //       <TouchableOpacity style={styles.button} //Log in
-    //         onPress={this.getEquipmentPrice}>
-    //         <Text>get price </Text>
-    //       </TouchableOpacity>
-
-    //       <TouchableOpacity style={styles.button} //Log in
-    //         onPress={this.addEquipmentToInventory}>
-    //         <Text>add EQ to Inv </Text>
-    //       </TouchableOpacity>
-
-
-    //       {/* <TouchableOpacity style={styles.button} //Log in
-    //         onPress={this.purchaseEquipment("tester2", "Metal sword")}>
-    //         <Text>purchase equipment</Text>
-    //       </TouchableOpacity> */}
-
-    //       <TouchableOpacity style={styles.button} //Log in
-    //         onPress={this.Login}>
-    //         <Text>Back</Text>
-    //       </TouchableOpacity>
-
-    //     </View>
-    //   </KeyboardAvoidingView>
-    // )
   }
 }
 export default withUserContext(Shop);
@@ -247,70 +166,11 @@ export default withUserContext(Shop);
 
 //Design of the page
 const styles = StyleSheet.create({
-  screen: {
-    padding: 50, 
-    flexDirection: 'row',
-    width: '80%',
-    height: 300
-  },
-  
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#433a64'
-  },
-  inputbox:
-  {
-    width: 300,
-    height: 40,
-    backgroundColor: 'rgba(255,255,255,0.3)',
-    borderRadius: 25,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    marginVertical: 10
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-    color: '#ffffff',
-  },
-
-  button:
-  {
-    width: 200,
-    height: 30,
-    backgroundColor: 'rgba(255,255,255,0.3)',
-    paddingHorizontal: 16,
-    borderRadius: 25,
-    fontSize: 20,
-    marginVertical: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row'
-  },
-  text:
-  {
-    color: '#ffffff'
-  },
-
-  
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-  pokeListHeader: {
-    fontSize: 20,
-    color: '#fff'
-  },
   listItemContainer: {
+    fontSize: 15,
+    textAlign: 'center',
+    margin: 10,
+    color: 'white',
     borderStyle: 'solid',
     borderColor: '#fff',
     borderBottomWidth: 2,
@@ -318,11 +178,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 20
 },
-pokeItemHeader: {  
+itemHeader: {  
     color: '#fff',
-    fontSize: 24,
+    fontSize: 20,
 },
-pokeImage: {
+equipmentImage: {
     backgroundColor: 'transparent',
     height: 50,
     width: 50
