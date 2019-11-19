@@ -6,13 +6,14 @@ import '@firebase/firestore'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createBottomTabNavigator, } from 'react-navigation-tabs';
 import { withNavigation } from 'react-navigation'
-import { UserProvider } from './src/Pages/UserContext'
+import { UserProvider, withUserContext } from './src/Pages/userContext'
 
 import LoginScreen from './src/Pages/LoginScreen';
 import Registration from './src/Pages/RegistrationScreen'
+import MapScreen from './src/Pages/MapScreen';
 import Mainpage from './src/Pages/Mainpage'
 import Profile from './src/Pages/Profile'
-import Routes from './src/Pages/Route';
+import Shop from './src/Pages/Shop'
 
 export default class App extends Component {
   render() {
@@ -24,6 +25,7 @@ export default class App extends Component {
     );
   }
 }
+
 
 //Bottom tab navigation
 const AppTab = createBottomTabNavigator(
@@ -39,6 +41,18 @@ const AppTab = createBottomTabNavigator(
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
       }
+    },
+    MapScreen: {
+      screen:  MapScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
+      }
+    },
+    Shop: {
+      screen: Shop,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
+      } 
     }
   }
 )
@@ -49,6 +63,7 @@ const SN = createSwitchNavigator(
   {
     Login: { screen: LoginScreen },
     Register: { screen: Registration },
+    MapScreen: { screen: MapScreen },
     SN: { screen: AppTab },
   },
   {

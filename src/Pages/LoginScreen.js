@@ -14,7 +14,8 @@ import {
 import { Actions } from 'react-native-router-flux';
 import firebase from 'firebase';
 import "@firebase/firestore";
-import { UserProvider, withUserContext } from "./UserContext";
+import { withNavigation} from 'react-navigation';
+import { UserProvider, withUserContext } from "./userContext";
 import { Ionicons } from '@expo/vector-icons'
 import FormInput from '../component/FormInput'
 import { Formik } from 'formik'
@@ -71,6 +72,13 @@ class LoginScreen extends Component {
     Actions.Mainpage()
   }
 
+  setName = (test) => {
+    this.props.userProvider.setContextData(test);
+  }
+
+  setUser = (test) => {
+   this.props.userProvider.setUserDetails(test);
+  }
 
   handleSubmit = values => {
     const {
@@ -96,8 +104,8 @@ class LoginScreen extends Component {
             console.log(email)
             Alert.alert('Welcome ' + this.state.Email);
           })
-        //this.props.navigation.navigate("SN");
-        Actions.Mainpage();
+        this.props.navigation.navigate("SN");
+        //Actions.Mainpage();
       }).catch((error) => {
         alert(error);
       });
@@ -166,6 +174,28 @@ class LoginScreen extends Component {
                   onPress={() => this.props.navigation.navigate("Register")}>
                   <Text>Sign Up</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button} //Shop 
+              >
+              <Text>Shop</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.button} onPress={this.props.navigation.navigate("SN")}>
+              <Text>Map</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.button} //tester 
+              onPress = {this.setName}>
+              <Text>change name</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.button} //tester 
+              onPress = {this.setName}>
+                <Text>{this.props.userProvider.contextData}</Text>
+              </TouchableOpacity>
+
+
+
               </View>
             )}
         </Formik>
@@ -173,7 +203,7 @@ class LoginScreen extends Component {
     )
   }
 }
-export default withUserContext(LoginScreen)
+export default withNavigation(withUserContext(LoginScreen))
 
 
 const styles = StyleSheet.create({

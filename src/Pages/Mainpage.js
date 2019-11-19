@@ -11,8 +11,9 @@ import {
 
 import { Actions } from 'react-native-router-flux';
 import firebase from 'firebase';
+import {withNavigation} from 'react-navigation';
 import "@firebase/firestore";
-import { UserConsumer,UserProvider, withUserContext } from './UserContext'
+import { UserConsumer,UserProvider, withUserContext } from './userContext'
 
 class Mainpage extends Component {
 
@@ -22,7 +23,6 @@ class Mainpage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            UserData: props.UserProvider.UserData
         };
         
     }
@@ -31,7 +31,7 @@ class Mainpage extends Component {
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding">
                         <View style={styles.container}>
-                            <Text style={styles.welcome}>Welcome to W.A.L.K {this.props.UserProvider.UserData.DOB} Mainpage</Text>
+                            <Text style={styles.welcome}>Welcome to W.A.L.K {this.props.userProvider.contextData} Mainpage</Text>
                             <TouchableOpacity style={styles.button} //Log in
                                 onPress={() => this.props.navigation.navigate("Login")}>
                                 <Text>Logout</Text>

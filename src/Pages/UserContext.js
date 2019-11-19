@@ -1,50 +1,45 @@
-import React, { createContext, useState } from "react";
-import '@firebase/firestore'
-import firebase from 'firebase';
+import React from 'react'
+const UserContext = React.createContext();
 
-// const initialState = {
-//     UserData: { },
-// };
-
-//export const UserContext = createContext();
-const UserContext = createContext();
-//export const UserConsumer = UserContext.Consumer;
 
 export class UserProvider extends React.Component {
-
     static contextType = UserProvider;
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            UserData: {}
-        };
+
+    state = {
+        contextData: "tester2", //Default Value
+        stepCount: "hello",
+        journeyStarted: false,
+        userDetails: {}
+    };
+
+    setUserDetails = (user) => {
+        this.setState({userDetails: user});
+    }
+
+    setContextData = (thing) => {
+        this.setState({contextData: thing});
+    }
+
+    setJourneyStarted = (toggle) =>{
+        this.setState({journeyStarted: toggle})
     }
 
     getValues = () => {
         return {
-            UserData: this.state.UserData
+            contextData: this.state.contextData,
+            stepCount: this.state.stepCount,
+            journeyStarted: this.state.journeyStarted,
+            userDetails: this.state.userDetails,
+            setUserDetails : this.setUserDetails,
+            setContextData : this.setContextData,
+            setJourneyStarted : this.setJourneyStarted
         }
-    }
-
-    setUserData = (UserData) => {
-        this.setState({ UserData: UserData })
-    };
-
-    watchUserData = () => {
-        const db = firebase.firestore();
-        var user = firebase.auth().currentUser
-        this.setUserData(db.collection("Users").doc(user).get())
     }
 
     render() {
         return (
             <UserContext.Provider value={this.getValues()}>
-                {/*             
-            watchUserData: this.watchUserData,
-            UserData: this.state.UserData,
-            favouriteAnimal: this.state.favouriteAnimal, */}
-
                 {this.props.children}
             </UserContext.Provider>
         );
@@ -56,7 +51,7 @@ export function withUserContext(Component) {
         render() {
             return (
                 <UserContext.Consumer>
-                    {(value) => <Component {...this.props} UserProvider={value} />}
+                    {(value) => <Component {...this.props} userProvider={value} />}
                 </UserContext.Consumer>
             );
         };
@@ -64,16 +59,3 @@ export function withUserContext(Component) {
 
     return ComponentWithContext;
 }
-
-// import React, { createContext } from 'react'
-
-// const FireStoreContext = createContext();
-
-// export const FirestoreProvider = FireStoreContext.Provider;
-// export const FirestoreConsumer = FireStoreContext.Consumer;
-
-// export const withFireStoreHOC = Component => props => (
-//     <FireStoreConsumer>
-//       {state => <Component {...props} firebase={state} />}
-//     </FireStoreConsumer>
-//   )
