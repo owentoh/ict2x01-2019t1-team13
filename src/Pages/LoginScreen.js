@@ -175,15 +175,6 @@ class LoginScreen extends Component {
                   <Text>Sign Up</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} //Shop 
-              >
-              <Text>Shop</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.button} onPress={this.props.navigation.navigate("SN")}>
-              <Text>Map</Text>
-              </TouchableOpacity>
-
               <TouchableOpacity style={styles.button} //tester 
               onPress = {this.setName}>
               <Text>change name</Text>

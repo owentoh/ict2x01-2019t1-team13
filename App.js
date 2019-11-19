@@ -30,11 +30,29 @@ export default class App extends Component {
 //Bottom tab navigation
 const AppTab = createBottomTabNavigator(
   {
+    MapScreen: {
+      screen:  MapScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
+      }
+    },
+    Inventory: {
+      screen: Shop,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-home" size={24} color={tintColor} />
+      }
+    }, 
     Mainpage: {
       screen: Mainpage,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-home" size={24} color={tintColor} />
       }
+    }, 
+    Shop: {
+      screen: Shop,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
+      } 
     },
     Profile: {
       screen: Profile,
@@ -42,18 +60,6 @@ const AppTab = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
       }
     },
-    MapScreen: {
-      screen:  MapScreen,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
-      }
-    },
-    Shop: {
-      screen: Shop,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
-      } 
-    }
   }
 )
 
@@ -64,7 +70,8 @@ const SN = createSwitchNavigator(
     Login: { screen: LoginScreen },
     Register: { screen: Registration },
     MapScreen: { screen: MapScreen },
-    SN: { screen: AppTab },
+    SN: { screen: AppTab }
+    //Inventory: { screen: Shop }
   },
   {
     initialRouteName: "Login"
