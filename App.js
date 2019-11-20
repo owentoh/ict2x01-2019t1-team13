@@ -9,6 +9,7 @@ import { withNavigation } from 'react-navigation'
 import { UserProvider, withUserContext } from './src/Pages/userContext'
 
 import LoginScreen from './src/Pages/LoginScreen';
+import Leaderboard from './src/Pages/LeaderboardOverall'
 import Registration from './src/Pages/RegistrationScreen'
 import MapScreen from './src/Pages/MapScreen';
 import Mainpage from './src/Pages/Mainpage'
@@ -30,6 +31,12 @@ export default class App extends Component {
 //Bottom tab navigation
 const AppTab = createBottomTabNavigator(
   {
+    Leaderboard: {
+      screen: Leaderboard,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
+      }
+    },
     MapScreen: {
       screen:  MapScreen,
       navigationOptions: {
