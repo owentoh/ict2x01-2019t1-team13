@@ -2,16 +2,21 @@ import React from 'react'
 const UserContext = React.createContext();
 
 
+
 export class UserProvider extends React.Component {
     static contextType = UserProvider;
-
 
     state = {
         contextData: "tester2", //Default Value
         stepCount: "hello",
         journeyStarted: false,
-        userDetails: {}
+        userDetails: {},
+        totalDamage: 0
     };
+
+    setTotalDamage = (damage) => {
+        this.setState({totalDamage: damage})
+    }
 
     setUserDetails = (user) => {
         this.setState({userDetails: user});
@@ -31,9 +36,12 @@ export class UserProvider extends React.Component {
             stepCount: this.state.stepCount,
             journeyStarted: this.state.journeyStarted,
             userDetails: this.state.userDetails,
+            totalDamage: this.state.totalDamage,
+
             setUserDetails : this.setUserDetails,
             setContextData : this.setContextData,
-            setJourneyStarted : this.setJourneyStarted
+            setJourneyStarted : this.setJourneyStarted,
+            setTotalDamage : this.setTotalDamage
         }
     }
 

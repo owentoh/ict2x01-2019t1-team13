@@ -27,6 +27,8 @@ class Shop extends Component {
       price: 1,
       equipmentList : [],
       loading: true,
+      damage: 0,
+      totalDamage: 0
     }
   }
 
@@ -41,7 +43,17 @@ class Shop extends Component {
         });
       this.setState({equipmentList: returnArray, loading: false});        
     }.bind(this));
-  }
+
+    db.collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").get().then(function (query) {
+      var returnArray = []
+      var countDamage = 0
+      query.forEach(function (doc) {
+        if (doc.data().itemStatus == true) {
+          countDamage += doc.data().damage;
+        }});
+      this.setState({ totalDamage: countDamage })
+      this.props.userProvider.setTotalDamage(countDamage)
+  }.bind(this))}
 
   renderEquipment = (data) => {
     return <TouchableOpacity style={{ backgroundColor: '#433a64' }} onPress={() => this.purchaseEquipment("Toh_jin_wen@hotmail.com", data.item.name)}>
@@ -50,7 +62,6 @@ class Shop extends Component {
         <Text style={styles.itemHeader}>{data.item.name}</Text>
         <Text>Cost: {data.item.cost} Runes</Text>
         <Text>Damage: {data.item.damage}</Text>
-
       </View>
     </TouchableOpacity>
   }
@@ -64,6 +75,8 @@ class Shop extends Component {
       //this.getEquipmentPrice();
       const docEquipment = db.collection("Equipment").doc(equipment);
       docEquipment.get().then(doc => this.setState({ price: doc.data().cost }));
+      docEquipment.get().then(doc => this.setState({ damage: doc.data().damage }));
+      
 
       if (this.state.runes >= this.state.price) {
         //this.minusRunes();
@@ -71,7 +84,7 @@ class Shop extends Component {
 
         //this.addEquipmentToInventory();
         //docUserProfile.update({ Inventory: firebase.firestore.FieldValue.arrayUnion(equipment) });
-        docUserProfile.collection("inventory").doc(equipment).set({name: equipment, itemStatus: false});
+        docUserProfile.collection("inventory").doc(equipment).set({name: equipment, itemStatus: false, damage: this.state.damage, cost: this.state.price });
 
         //this.showPurchaseSuccess();
         Alert.alert("You have successfully purchased the item");
