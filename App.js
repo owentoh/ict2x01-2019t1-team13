@@ -12,6 +12,7 @@ import LoginScreen from './src/Pages/LoginScreen';
 import Leaderboard from './src/Pages/LeaderboardOverall'
 import Registration from './src/Pages/RegistrationScreen'
 import MapScreen from './src/Pages/MapScreen';
+import Inventory from './src/Pages/Inventory.js'
 import Mainpage from './src/Pages/Mainpage'
 import Profile from './src/Pages/Profile'
 import Shop from './src/Pages/Shop'
@@ -44,7 +45,7 @@ const AppTab = createBottomTabNavigator(
       }
     },
     Inventory: {
-      screen: Shop,
+      screen: Inventory,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-home" size={24} color={tintColor} />
       }
@@ -77,8 +78,12 @@ const SN = createSwitchNavigator(
     Login: { screen: LoginScreen },
     Register: { screen: Registration },
     MapScreen: { screen: MapScreen },
-    SN: { screen: AppTab }
-    //Inventory: { screen: Shop }
+    SN: { screen: AppTab },
+    Inventory: { screen: Inventory },
+    Leaderboard: { screen: Leaderboard },
+    Mainpage : { screen: Mainpage },
+    Shop : { screen: Shop },
+    Profile : { screen: Profile}
   },
   {
     initialRouteName: "Login"
