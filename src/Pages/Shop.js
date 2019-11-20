@@ -70,7 +70,8 @@ class Shop extends Component {
         docUserProfile.update({ Runes: firebase.firestore.FieldValue.increment(-(this.state.price)) });
 
         //this.addEquipmentToInventory();
-        docUserProfile.update({ Inventory: firebase.firestore.FieldValue.arrayUnion(equipment) });
+        //docUserProfile.update({ Inventory: firebase.firestore.FieldValue.arrayUnion(equipment) });
+        docUserProfile.collection("inventory").doc(equipment).set({name: equipment, itemStatus: false});
 
         //this.showPurchaseSuccess();
         Alert.alert("You have successfully purchased the item");
