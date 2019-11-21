@@ -19,23 +19,47 @@ class Mainpage extends Component {
 
     //static contextType = UserProvider;
 
+    componentDidMount(){
+        // interval = setInterval(() => {
+        //     if (this.props.userProvider.increaseStep != 0){
+        //         console.log("got update")
+        //     } 
+        //     else{
+        //         console.log("no update")
+        //     }
+        // }, 1000); //run with ms
+    }
 
     constructor(props) {
         super(props);
         this.state = {
+
         };
-        
     }
 
     render() {
+
+//          const monster = (this.props.userProvider.increaseStep == 0) ? <Image source={require('../Images/monsterStand.png')}/>
+//  : <Image source={require('../Images/monsterHit.png')}/>
+        let monster
+        if (this.props.userProvider.hp <= 0) {
+            monster = <Image source={require('../Images/monsterDead.png')} />
+        }
+        else if (this.props.userProvider.increaseStep == 0) {
+            monster = <Image source={require('../Images/monsterStand.png')} />
+        }
+        else {
+            monster = <Image source={require('../Images/monsterHit.png')} />
+        }
+
+
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding">
                         <View style={styles.container}>
-                            <Text style={styles.welcome}>Welcome to W.A.L.K {this.props.userProvider.contextData} Mainpage</Text>
-                            <TouchableOpacity style={styles.button} //Log in
-                                onPress={() => this.props.navigation.navigate("Login")}>
-                                <Text>Logout</Text>
-                            </TouchableOpacity>
+        <Text style={styles.welcome}>Monster HP: {this.props.userProvider.hp} / 1000</Text>
+        <Text style={styles.welcome}>Current Damage: {this.props.userProvider.totalDamage}</Text>
+
+                            {monster}
                         </View>
 
                     

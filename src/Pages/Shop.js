@@ -43,18 +43,8 @@ class Shop extends Component {
         });
       this.setState({equipmentList: returnArray, loading: false});        
     }.bind(this));
-
-    db.collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").get().then(function (query) {
-      var returnArray = []
-      var countDamage = 0
-      query.forEach(function (doc) {
-        if (doc.data().itemStatus == true) {
-          countDamage += doc.data().damage;
-        }});
-      this.setState({ totalDamage: countDamage })
-      this.props.userProvider.setTotalDamage(countDamage)
-  }.bind(this))}
-
+  }
+  
   renderEquipment = (data) => {
     return <TouchableOpacity style={{ backgroundColor: '#433a64' }} onPress={() => this.purchaseEquipment("Toh_jin_wen@hotmail.com", data.item.name)}>
       <View style={styles.listItemContainer}>

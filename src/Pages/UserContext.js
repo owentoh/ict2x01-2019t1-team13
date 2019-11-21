@@ -1,4 +1,8 @@
 import React from 'react'
+import { Pedometer } from "expo-sensors";
+
+import firebase from 'firebase'
+require("firebase/firestore");
 const UserContext = React.createContext();
 
 
@@ -11,8 +15,82 @@ export class UserProvider extends React.Component {
         stepCount: "hello",
         journeyStarted: false,
         userDetails: {},
-        totalDamage: 0
+        totalDamage: 1,
+        currentStepCount: 0,
+        hp: 1000,
+        increaseStep: 0,
+        userLoggedin: true
     };
+
+
+    componentDidMount() {
+        this._subscribe();
+        interval = setInterval(() => {
+            if (this.state.userLoggedin){
+                //Retrieve equipment damage
+                const db = firebase.firestore();
+                db.collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").get().then(function (query) {
+                    var countDamage = 1
+                    query.forEach(function (doc) {
+                      if (doc.data().itemStatus == true) {
+                        countDamage += doc.data().damage;
+                      }})
+                      this.setState({ totalDamage : countDamage})
+                    }.bind(this));
+                if (this.state.journeyStarted){
+                    this.setState({ totalDamage : this.state.totalDamage * 1.5})
+                }
+                console.log("my current damage", this.state.totalDamage)
+                if(this.state.increaseStep != 0){
+                    this.setState({
+                        hp: (this.state.hp - (this.state.increaseStep*this.state.totalDamage))
+                    })
+                    console.log(this.state.hp, "monster left this hp")
+                }
+                if(this.state.hp <= 0){
+                    console.log("monster diedddddddddddddddddddddddddddd")
+                    this.addEXP()
+                    this.addRunes()
+                    this.generateMob()
+                }
+                else {
+                    console.log("monster aliveeeeeeeeeeeeeeeeeeeeeeeeeeee")
+                }
+                this.setState({
+                    increaseStep: 0
+                })
+            } 
+        }, 1000); //run with ms
+    }
+
+    _subscribe = () => {
+        console.log("sub in")
+        this._subscription = Pedometer.watchStepCount(result => {
+            console.log("insideee")
+            if (result.steps>this.state.currentStepCount){
+                var increaseBy = result.steps - this.state.currentStepCount
+                console.log(increaseBy)
+                this.setState({currentStepCount: result.steps,
+                    increaseStep: increaseBy});
+            }
+        });
+    }
+
+    addEXP = () =>{
+        const db = firebase.firestore();
+        const docUserProfile = db.collection("Game").doc("Toh_jin_wen@hotmail.com");
+        docUserProfile.update({ Exp: firebase.firestore.FieldValue.increment(100) });
+    }
+
+    addRunes = () => {
+        const db = firebase.firestore();
+        const docUserProfile = db.collection("Game").doc("Toh_jin_wen@hotmail.com");
+        docUserProfile.update({ Runes: firebase.firestore.FieldValue.increment(10) });
+    }
+
+    generateMob = () => {
+        this.setState ({hp: 1000})
+    }
 
     setTotalDamage = (damage) => {
         this.setState({totalDamage: damage})
@@ -37,6 +115,13 @@ export class UserProvider extends React.Component {
             journeyStarted: this.state.journeyStarted,
             userDetails: this.state.userDetails,
             totalDamage: this.state.totalDamage,
+            currentStepCount: this.state.currentStepCount,
+            hp: this.state.hp,
+            increaseStep: this.state.increaseStep,
+            userLoggedin: this.state.userLoggedin,
+
+            
+
 
             setUserDetails : this.setUserDetails,
             setContextData : this.setContextData,
