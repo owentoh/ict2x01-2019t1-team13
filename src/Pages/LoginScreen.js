@@ -184,8 +184,8 @@ class LoginScreen extends Component {
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.button} //tester 
-              onPress = {this.setName}>
-                <Text>{this.props.userProvider.contextData}</Text>
+              onPress = {() => this.props.navigation.navigate("Mainpage")}>
+                <Text>Mainpage hack</Text>
               </TouchableOpacity>
 
 

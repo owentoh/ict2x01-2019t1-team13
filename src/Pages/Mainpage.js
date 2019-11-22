@@ -20,14 +20,17 @@ class Mainpage extends Component {
     //static contextType = UserProvider;
 
     componentDidMount(){
-        // interval = setInterval(() => {
-        //     if (this.props.userProvider.increaseStep != 0){
-        //         console.log("got update")
-        //     } 
-        //     else{
-        //         console.log("no update")
-        //     }
-        // }, 1000); //run with ms
+        //Retrieve equipment damage
+        // const db = firebase.firestore();
+        // db.collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").get().then(function (query) {
+        //     var countDamage = 1
+        //     query.forEach(function (doc) {
+        //         if (doc.data().itemStatus == true) {
+        //             countDamage += doc.data().damage;
+        //         }
+        //     })
+        //     this.props.userProvider.setTotalDamage(countDamage)
+        // }.bind(this));
     }
 
     constructor(props) {
@@ -38,9 +41,6 @@ class Mainpage extends Component {
     }
 
     render() {
-
-//          const monster = (this.props.userProvider.increaseStep == 0) ? <Image source={require('../Images/monsterStand.png')}/>
-//  : <Image source={require('../Images/monsterHit.png')}/>
         let monster
         if (this.props.userProvider.hp <= 0) {
             monster = <Image source={require('../Images/monsterDead.png')} />
