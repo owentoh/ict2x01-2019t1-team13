@@ -7,7 +7,7 @@ import { Modal, Platform, StyleSheet, Text, View, ActivityIndicator, FlatList, I
 import firebase from 'firebase'
 require("firebase/firestore");
 
-//import More from './More.js'
+// import More from './More.js'
 
 //import { YellowBox } from 'react-native';
 //import _ from 'lodash';
@@ -51,235 +51,235 @@ const { width, height } = Dimensions.get('window');
 //   );
 // };
 
-
+const GamePost = ({gameDetails}) => {
+  return (
+    <View style={styles.imageContainer}>
+      <Image style={styles.image} resizeMode="cover" source={ require("../Images/plasticsword.png") } />
+       <View style={styles.cardContent}>
+        <Text style={styles.inventoryDetail}>{gameDetails.name}</Text>
+        <Text style={styles.inventoryDetail}>{gameDetails.itemStatus}</Text>
+            <Button title="Equip" onPress={() => this.equip()} />
+            <Button title="Unequip" onPress={() => this.unequip()} />
+        </View>
+      </View>
+    );
+};
 
 export default class Inventory extends React.Component {
-    static navigationOptions = {
-        title: 'Inventory',
-        headerStyle: {
-            backgroundColor: '#9b1ef4',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-            fontWeight: 'bold',
-        },
+  static navigationOptions = {
+    title: 'Inventory',
+    headerStyle: {
+      backgroundColor: '#9b1ef4',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }; 
+
+  constructor() {
+    super();
+    //this.ref = firebase.firestore().collection("Game");
+    this.ref = firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory");
+    this.unsubscribe = null;
+    this.state = {
+      gamePosts: [],
+      loading: true,
+      userSelected:[]
     };
+  }
+ 
+  
+  componentDidMount() {
+    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate)
+  }
 
-    constructor(props) {
-        super(props);
-        this.state ={
-            ref : firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory"),
-            unsubscribe : null,
-            gamePosts: [],
-            loading: true,
-            userSelected: []
-    
-        //this.ref = firebase.firestore().collection("Game");
-        
-        };
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  onCollectionUpdate = (querySnapshot) => {
+    const gamePosts = [];
+    querySnapshot.forEach((doc) => {
+      const { uri, itemStatus, name, } = doc.data();
+      gamePosts.push({
+        key: doc.id, // Document ID
+        doc, // DocumentSnapshot
+        // CurrentSteps,
+        // Damage,
+        // Username,
+        //Inventory,
+        uri,
+        itemStatus,
+        name,
+      });
+    });
+    this.setState({
+      gamePosts,
+      loading: false,
+   });
+  }
+
+  equip  () {
+    this.add({
+      itemStatus: 'true'},
+      { create: true}
+            
+    );
+  }
+  unequip  () {
+    this.set({
+      itemStatus: 'false'},
+      { create: true}    
+    );
+  }
+
+  render() {
+    if (this.state.loading) {
+      return <View style={styles.loader}><ActivityIndicator size="large" color="#0000ff" /></View>;
     }
-
-
-    componentDidMount() {
-        this.unsubscribe = this.state.ref.onSnapshot(this.onCollectionUpdate)
-    }
-
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
-
-    onCollectionUpdate = (querySnapshot) => {
-        const gamePosts = [];
-        querySnapshot.forEach((doc) => {
-            const { uri, itemStatus, name, } = doc.data();
-            gamePosts.push({
-                key: doc.id, // Document ID
-                doc, // DocumentSnapshot
-                // CurrentSteps,
-                // Damage,
-                // Username,
-                //Inventory,
-                uri,
-                itemStatus,
-                name,
-            });
-        });
-        this.setState({
-            gamePosts,
-            loading: false,
-        });
-    }
-
-    
-    equip = () => {
-        this.state.ref.add(
-            { itemStatus: 'true' },
-            { create: true }
-        );
-    }
-    unequip = () => {
-        firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").doc("Bear").update({ itemStatus: false })
-        // this.state.ref.set(
-        //     { itemStatus: 'false' },
-        //     { create: true }
-        // );
-    }
-
-    GamePost = (gameDetails) => {
-        return (
-            <View style={styles.imageContainer}>
-                <Image style={styles.image} resizeMode="cover" source={require("../Images/plasticsword.png")} />
-                <View style={styles.cardContent}>
-                    <Text style={styles.inventoryDetail}>{gameDetails.name}</Text>
-                    <Text style={styles.inventoryDetail}>{gameDetails.itemStatus}</Text>
-                    <Button title="Equip" onPress={() => this.equip()} />
-                    <Button title="Unequip" onPress={() => this.unequip()} />
-                </View>
-            </View>
-        );
-    };
-
-    render() {
-        if (this.state.loading) {
-            return <View style={styles.loader}><ActivityIndicator size="large" color="#0000ff" /></View>;
-        }
-        return (
-            <SafeAreaView style={styles.container}>
-                {/* <ScrollView style={styles.scrollView}> */}
-                <Text style={styles.textHeader}>Inventory</Text>
-                <View style={styles.inventoryDetails}>
-                    < FlatList
-                        style={styles.userList}
-                        data={this.state.gamePosts}
-                        keyExtractor={(item) => {return item.id;}}
-                        renderItem={this.GamePost}>
-                    </FlatList>
-                </View>
-                {/* </ScrollView> */}
-            </SafeAreaView>
-        );
-    }
+    return (
+    <SafeAreaView style={styles.container}>
+        {/* <ScrollView style={styles.scrollView}> */}
+          <Text style={styles.textHeader}>Inventory</Text>
+          <View style={styles.inventoryDetails}>
+          <FlatList
+            style={styles.userList}
+            data={this.state.gamePosts}
+            keyExtractor= {(item) => {
+              return item.id;
+            }}
+            renderItem={({ item }) => <GamePost gameDetails={item}/>}>
+            
+            </FlatList>
+           
+          
+          </View> 
+        {/* </ScrollView> */}
+    </SafeAreaView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: 20,
-        backgroundColor: '#fff',
-    },
+  container: {
+    flex: 1,
+    marginTop:20,
+    backgroundColor: '#fff',
+  },
 
-    loader: {
-        paddingTop: 300,
-    },
+  loader: {
+    paddingTop: 300,
+  },
 
-    inventoryDetails: {
-        height: 500,
-        alignItems: 'stretch',
-        marginTop: 10,
-        marginLeft: 15,
-        marginRight: 15,
-    },
+  inventoryDetails: {
+    height: 500,
+    alignItems: 'stretch',
+    marginTop: 10,
+    marginLeft: 15,
+    marginRight: 15,
+  },
 
-    textContainer: {
-        flexDirection: 'row',
-        padding: 10,
-        height: 40,
-        backgroundColor: '#f6f8fa',
+  textContainer: {
+    flexDirection: 'row',
+    padding: 10,
+    height: 40,
+    backgroundColor: '#f6f8fa',
+    
+  },
 
-    },
+  usernameDetail: {
+    flex: 3,
+    textAlign: 'center',
+  },
 
-    usernameDetail: {
-        flex: 3,
-        textAlign: 'center',
-    },
+  damageDetail: {
+    flex: 1,
+    textAlign: 'center',
+  },
 
-    damageDetail: {
-        flex: 1,
-        textAlign: 'center',
-    },
+  stepDetail: {
+    flex: 1,
+    textAlign: 'center',
+  },
 
-    stepDetail: {
-        flex: 1,
-        textAlign: 'center',
-    },
+  textHeader: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 20,
+  },
 
-    textHeader: {
-        textAlign: 'center',
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginTop: 20,
-    },
+  tableHeaderContainer: {
+    flexDirection: 'row',
+    padding: 10,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#426585',
+  },
 
-    tableHeaderContainer: {
-        flexDirection: 'row',
-        padding: 10,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#426585',
-    },
+  textTableHeader1: {
+    textAlign: 'center',
+    color: '#fefefe',
+  },
 
-    textTableHeader1: {
-        textAlign: 'center',
-        color: '#fefefe',
-    },
+  textTableHeader2: {
+    textAlign: 'center',
+    color: '#fefefe',
+  },
 
-    textTableHeader2: {
-        textAlign: 'center',
-        color: '#fefefe',
-    },
+  textTableHeader3: {
+    textAlign: 'center',
+    color: '#fefefe',
+  },
 
-    textTableHeader3: {
-        textAlign: 'center',
-        color: '#fefefe',
-    },
+  tableHeaderContainer1: {
+    flex: 3,
+  },
 
-    tableHeaderContainer1: {
-        flex: 3,
-    },
+  tableHeaderContainer2: {
+    flex: 2,
+  },
 
-    tableHeaderContainer2: {
-        flex: 2,
-    },
+  tableHeaderContainer3: {
+    flex: 2,
+  },
+  viewButton: {
+    marginTop:10,
+    height:35,
+    width:100,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius:30,
+    backgroundColor: "#00BFFF",
+  },
+  viewButtonText:{
+    color: "red",
+    fontSize:20,
+  },
+  // card:{
+  //   shadowColor: '#00000021',
+  //   shadowOffset: {
+  //     width: 0,
+  //     hcardeight: 6,
+  //   },
+  //   shadowOpacity: 0.37,
+  //   shadowRadius: 7.49,
+  //   elevation: 12,
 
-    tableHeaderContainer3: {
-        flex: 2,
-    },
-    viewButton: {
-        marginTop: 10,
-        height: 35,
-        width: 100,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 30,
-        backgroundColor: "#00BFFF",
-    },
-    viewButtonText: {
-        color: "red",
-        fontSize: 20,
-    },
-    // card:{
-    //   shadowColor: '#00000021',
-    //   shadowOffset: {
-    //     width: 0,
-    //     hcardeight: 6,
-    //   },
-    //   shadowOpacity: 0.37,
-    //   shadowRadius: 7.49,
-    //   elevation: 12,
+  //   marginVertical: 10,
+  //   marginHorizontal:20,
+  //   backgroundColor:"white",
+  //   flexBasis: '46%',
+  //   padding: 10,
+  //   flexDirection:'row'
+  // },
+  cardContent:{
+    marginLeft:20,
+    marginTop:10
+  },
 
-    //   marginVertical: 10,
-    //   marginHorizontal:20,
-    //   backgroundColor:"white",
-    //   flexBasis: '46%',
-    //   padding: 10,
-    //   flexDirection:'row'
-    // },
-    cardContent: {
-        marginLeft: 20,
-        marginTop: 10
-    },
-
-
+ 
 });
