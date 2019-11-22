@@ -88,6 +88,7 @@ const SN = createSwitchNavigator(
     //Profile : { screen: Profile},
     Loading: { screen: Loading },
     PreLoading: { screen: PreLoading }
+    
   },
   {
     initialRouteName: "PreLoading"

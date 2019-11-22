@@ -56,6 +56,7 @@ class Registration extends Component {
     header: null
   };
 
+
   constructor(props) {
     super(props);
 
@@ -68,6 +69,7 @@ class Registration extends Component {
       Address: '',
       Email: '',
       Password: '',
+      Date: '',
 
       //Game profile stats
       Damage: 0,
@@ -76,7 +78,15 @@ class Registration extends Component {
       Inventory: [],
       Runes: 0,
       LifeTimeSteps: 0,
+      Exp: 0
     };
+  }
+
+  componentDidMount() {
+    var date = new Date().getDate();
+    var month = new Date().getMonth();
+    var year = new Date().getFullYear();
+    this.state.date = date + '/' + month + '/' + year;
   }
 
   handleUsernamelocalstate = (Username) => {
@@ -124,7 +134,8 @@ class Registration extends Component {
       Equipment,
       Inventory,
       Runes,
-      LifeTimeSteps
+      LifeTimeSteps,
+      Exp
     } = this.state;
 
     this.handleUsernamelocalstate(values.Username);
@@ -149,6 +160,7 @@ class Registration extends Component {
             DOB: this.state.DOB,
             Email: this.state.Email,
             Address: this.state.Address,
+            Date: this.state.Date
           });
         db.collection('Game').doc(values.email).set(
           {
@@ -158,10 +170,11 @@ class Registration extends Component {
             Inventory,
             Runes,
             LifeTimeSteps,
+            Exp
           });
         this.props.navigation.navigate("Loading");
         this.sendEmail();
-        Alert.alert('Success!!!', 'Please authenticate your account through your email')
+        //Alert.alert('Success!!!', 'Please authenticate your account through your email')
       })
       .catch((error) => {
         alert(error);
