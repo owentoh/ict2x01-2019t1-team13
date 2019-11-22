@@ -42,7 +42,7 @@ const GamePost = ({gameDetails}) => {
   return (
       <View style={styles.textContainer}>
         <Text style={styles.usernameDetail}>{gameDetails.Username}</Text>
-        <Text style={styles.damageDetail}>{gameDetails.Damage}</Text>
+        <Text style={styles.damageDetail}>{gameDetails.Exp}</Text>
         <Text style={styles.stepDetail}>{gameDetails.CurrentSteps}</Text>
       </View>
   );
@@ -62,7 +62,7 @@ export default class Leaderboard extends React.Component {
 
   constructor() {
     super();
-    this.ref = firebase.firestore().collection("Game");
+    this.ref = firebase.firestore().collection("Game").orderBy("Username","asc");
     this.unsubscribe = null;
     this.state = {
       gamePosts: [],
@@ -81,12 +81,12 @@ export default class Leaderboard extends React.Component {
   onCollectionUpdate = (querySnapshot) => {
     const gamePosts = [];
     querySnapshot.forEach((doc) => {
-      const { CurrentSteps, Damage, Username, } = doc.data();
+      const { CurrentSteps, Exp, Username, } = doc.data();
       gamePosts.push({
         key: doc.id, // Document ID
         doc, // DocumentSnapshot
         CurrentSteps,
-        Damage,
+        Exp,
         Username,
       });
     });
@@ -109,7 +109,7 @@ export default class Leaderboard extends React.Component {
           <View style={styles.leaderboardDetails}>
           <View style={styles.tableHeaderContainer}>
           <View style={styles.tableHeaderContainer1}><Text style={styles.textTableHeader1}>Username</Text></View>
-          <View style={styles.tableHeaderContainer2}><Text style={styles.textTableHeader2}>Total Damage</Text></View>
+          <View style={styles.tableHeaderContainer2}><Text style={styles.textTableHeader2}>Total Exp</Text></View>
           <View style={styles.tableHeaderContainer3}><Text style={styles.textTableHeader3}>Total Steps</Text></View>
           </View>
           <FlatList
