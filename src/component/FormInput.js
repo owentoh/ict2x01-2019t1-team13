@@ -29,12 +29,13 @@ const FormInput = ({
 )
 const styles = StyleSheet.create({
   inputContainer: {
-    width: 300,
+    width: 350,
     height: 30,
     borderRadius: 25,
     paddingHorizontal: 18,
     fontSize: 15,
     margin: 10,
+    color:'white'
   },
   iconStyle: {
     marginRight: 10
