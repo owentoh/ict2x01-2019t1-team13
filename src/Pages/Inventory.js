@@ -1,285 +1,111 @@
-import * as React from 'react';
-import { Container, Tab, TabHeading, Tabs, StyleProvider, Icon } from 'native-base';
-import { Modal, Platform, StyleSheet, Text, View, ActivityIndicator, FlatList, Image, Dimensions, Button, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
-//import Tab2 from './LeaderboardDamage';
-//import Tab3 from './LeaderboardSteps';
+import React, { Component } from 'react';
 
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Button,
+  Alert
+} from 'react-native';
 import firebase from 'firebase'
+import {UserProvider,withUserContext} from './userContext';
+
 require("firebase/firestore");
 
-//import More from './More.js'
+class Inventory extends Component {
+  static contextType = UserProvider;
 
-//import { YellowBox } from 'react-native';
-//import _ from 'lodash';
-
-// YellowBox.ignoreWarnings(['Setting a timer']);
-// const _console = _.clone(console);
-// console.warn = message => {
-//   if (message.indexOf('Setting a timer') <= -1) {
-//     _console.warn(message);
-//   }
-// };
-
-// const firebaseConfig = {
-//   apiKey: "AIzaSyAk1kpPBPwJTGbdzIB9LUpJpXMy69fOUoI",
-//   authDomain: "walk-df0f7.firebaseapp.com",
-//   databaseURL: "https://walk-df0f7.firebaseio.com",
-//   projectId: "walk-df0f7",
-//   storageBucket: "walk-df0f7.appspot.com",
-//   messagingSenderId: "939704801477",
-//   appId: "1:939704801477:web:9cf1576ffed467c6a838ac",
-//   measurementId: "G-7PVC81VGB7"
-// };
-
-// Initialize Firebase
-//firebase.initializeApp(firebaseConfig);
-
-// if (!firebase.apps.length) {
-//   firebase.initializeApp(firebaseConfig);
-// }
-
-const { width, height } = Dimensions.get('window');
-
-// const GamePost = ({gameDetails}) => {
-//   return (
-//       <View style={styles.textContainer}>
-//         <Text style={styles.inventoryDetail}>{gameDetails.Inventory}</Text>
-//         {/* <Text style={styles.usernameDetail}>{gameDetails.Username}</Text>
-//         <Text style={styles.damageDetail}>{gameDetails.Damage}</Text>
-//         <Text style={styles.stepDetail}>{gameDetails.CurrentSteps}</Text> */}
-//       </View>
-//   );
-// };
-
-
-
-export default class Inventory extends React.Component {
-    static navigationOptions = {
-        title: 'Inventory',
-        headerStyle: {
-            backgroundColor: '#9b1ef4',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-            fontWeight: 'bold',
-        },
-    };
-
-    constructor(props) {
-        super(props);
-        this.state ={
-            ref : firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory"),
-            unsubscribe : null,
-            gamePosts: [],
-            loading: true,
-            userSelected: []
-    
-        //this.ref = firebase.firestore().collection("Game");
-        
-        };
+  constructor(props) {
+    super(props);
+    this.state = {
+      equipmentList : [],
+      loading: true
     }
+  }
 
+  async componentDidMount(){
 
-    componentDidMount() {
-        this.unsubscribe = this.state.ref.onSnapshot(this.onCollectionUpdate)
-    }
-
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
-
-    onCollectionUpdate = (querySnapshot) => {
-        const gamePosts = [];
-        querySnapshot.forEach((doc) => {
-            const { uri, itemStatus, name, } = doc.data();
-            gamePosts.push({
-                key: doc.id, // Document ID
-                doc, // DocumentSnapshot
-                // CurrentSteps,
-                // Damage,
-                // Username,
-                //Inventory,
-                uri,
-                itemStatus,
-                name,
-            });
+    const db = firebase.firestore();
+    db.collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").get().then(function (query) {
+      var returnArray = []
+      query.forEach(function (doc) {
+        var item = doc.data();
+        returnArray.push(item);
+        console.log(item)
         });
-        this.setState({
-            gamePosts,
-            loading: false,
-        });
-    }
+      this.setState({equipmentList: returnArray, loading: false});        
+    }.bind(this));
+  }
+  
+  renderEquipment = (data) => {
+    return <View>
+      <View style={styles.listItemContainer}>
+        <Image source={require("../Images/plasticsword.png")} styles={styles.equipmentImage} />
+        <Text>{data.item.name}</Text>
+        <Text>{data.item.itemStatus}</Text>
+        <Button title="Equip" onPress={() => this.equip(data.item.name)} />
+        <Button title="Unequip" onPress={() => this.unequip(data.item.name)} />
+      </View>
+    </View>
+  }
 
-    
-    equip = () => {
-        this.state.ref.add(
-            { itemStatus: 'true' },
-            { create: true }
-        );
-    }
-    unequip = () => {
-        firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").doc("Bear").update({ itemStatus: false })
-        // this.state.ref.set(
-        //     { itemStatus: 'false' },
-        //     { create: true }
-        // );
-    }
+  equip(name) {
+    firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").doc(name).update({ itemStatus: true });
+    Alert.alert("You have successfully equip the item");
+  }
 
-    GamePost = (gameDetails) => {
-        return (
-            <View style={styles.imageContainer}>
-                <Image style={styles.image} resizeMode="cover" source={require("../Images/plasticsword.png")} />
-                <View style={styles.cardContent}>
-                    <Text style={styles.inventoryDetail}>{gameDetails.name}</Text>
-                    <Text style={styles.inventoryDetail}>{gameDetails.itemStatus}</Text>
-                    <Button title="Equip" onPress={() => this.equip()} />
-                    <Button title="Unequip" onPress={() => this.unequip()} />
-                </View>
-            </View>
-        );
-    };
+  unequip(name) {
+    firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").doc(name).update({ itemStatus: false });
+    Alert.alert("You have successfully unequip the item");
+  }
 
-    render() {
-        if (this.state.loading) {
-            return <View style={styles.loader}><ActivityIndicator size="large" color="#0000ff" /></View>;
-        }
-        return (
-            <SafeAreaView style={styles.container}>
-                {/* <ScrollView style={styles.scrollView}> */}
-                <Text style={styles.textHeader}>Inventory</Text>
-                <View style={styles.inventoryDetails}>
-                    < FlatList
-                        style={styles.userList}
-                        data={this.state.gamePosts}
-                        keyExtractor={(item) => {return item.id;}}
-                        renderItem={this.GamePost}>
-                    </FlatList>
-                </View>
-                {/* </ScrollView> */}
-            </SafeAreaView>
-        );
-    }
+  render() {
+      if (!this.state.loading){
+        return (  
+              <FlatList 
+          data={this.state.equipmentList}
+          renderItem={this.renderEquipment}
+          keyExtractor={(item) => item.name} 
+          />)
+      }
+      else {
+        return (<ActivityIndicator/>)
+      }
+  }
 }
+export default withUserContext(Inventory);
 
+
+//Design of the page
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: 20,
-        backgroundColor: '#fff',
-    },
-
-    loader: {
-        paddingTop: 300,
-    },
-
-    inventoryDetails: {
-        height: 500,
-        alignItems: 'stretch',
-        marginTop: 10,
-        marginLeft: 15,
-        marginRight: 15,
-    },
-
-    textContainer: {
-        flexDirection: 'row',
-        padding: 10,
-        height: 40,
-        backgroundColor: '#f6f8fa',
-
-    },
-
-    usernameDetail: {
-        flex: 3,
-        textAlign: 'center',
-    },
-
-    damageDetail: {
-        flex: 1,
-        textAlign: 'center',
-    },
-
-    stepDetail: {
-        flex: 1,
-        textAlign: 'center',
-    },
-
-    textHeader: {
-        textAlign: 'center',
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginTop: 20,
-    },
-
-    tableHeaderContainer: {
-        flexDirection: 'row',
-        padding: 10,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#426585',
-    },
-
-    textTableHeader1: {
-        textAlign: 'center',
-        color: '#fefefe',
-    },
-
-    textTableHeader2: {
-        textAlign: 'center',
-        color: '#fefefe',
-    },
-
-    textTableHeader3: {
-        textAlign: 'center',
-        color: '#fefefe',
-    },
-
-    tableHeaderContainer1: {
-        flex: 3,
-    },
-
-    tableHeaderContainer2: {
-        flex: 2,
-    },
-
-    tableHeaderContainer3: {
-        flex: 2,
-    },
-    viewButton: {
-        marginTop: 10,
-        height: 35,
-        width: 100,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 30,
-        backgroundColor: "#00BFFF",
-    },
-    viewButtonText: {
-        color: "red",
-        fontSize: 20,
-    },
-    // card:{
-    //   shadowColor: '#00000021',
-    //   shadowOffset: {
-    //     width: 0,
-    //     hcardeight: 6,
-    //   },
-    //   shadowOpacity: 0.37,
-    //   shadowRadius: 7.49,
-    //   elevation: 12,
-
-    //   marginVertical: 10,
-    //   marginHorizontal:20,
-    //   backgroundColor:"white",
-    //   flexBasis: '46%',
-    //   padding: 10,
-    //   flexDirection:'row'
-    // },
-    cardContent: {
-        marginLeft: 20,
-        marginTop: 10
-    },
+  listItemContainer: {
+    fontSize: 15,
+    textAlign: 'center',
+    margin: 10,
+    color: 'white',
+    borderStyle: 'solid',
+    borderColor: '#fff',
+    borderBottomWidth: 2,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 20
+},
+itemHeader: {  
+    color: '#fff',
+    fontSize: 20,
+},
+equipmentImage: {
+    backgroundColor: 'transparent',
+    height: 50,
+    width: 50
+}
 
 
 });
+

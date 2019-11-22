@@ -27,16 +27,6 @@ export class UserProvider extends React.Component {
         this._subscribe();
         interval = setInterval(() => {
             if (this.state.userLoggedin){
-                //Retrieve equipment damage
-                const db = firebase.firestore();
-                db.collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").get().then(function (query) {
-                    var countDamage = 1
-                    query.forEach(function (doc) {
-                      if (doc.data().itemStatus == true) {
-                        countDamage += doc.data().damage;
-                      }})
-                      this.setState({ totalDamage : countDamage})
-                    }.bind(this));
                 if (this.state.journeyStarted){
                     this.setState({ totalDamage : this.state.totalDamage * 1.5})
                 }
@@ -115,6 +105,16 @@ export class UserProvider extends React.Component {
         this.setState({journeyStarted: toggle})
     }
 
+    // equip(name) {
+    //     firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").doc(name).update({ itemStatus: true });
+    //     Alert.alert("You have successfully equip the item");
+    // }
+
+    // unequip(name) {
+    //     firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").doc(name).update({ itemStatus: false });
+    //     Alert.alert("You have successfully unequip the item");
+    // }
+
     getValues = () => {
         return {
             contextData: this.state.contextData,
@@ -133,7 +133,9 @@ export class UserProvider extends React.Component {
             setUserDetails : this.setUserDetails,
             setContextData : this.setContextData,
             setJourneyStarted : this.setJourneyStarted,
-            setTotalDamage : this.setTotalDamage
+            setTotalDamage : this.setTotalDamage,
+            equip : this.equip,
+            unequip : this.unequip
         }
     }
 
