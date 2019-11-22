@@ -67,7 +67,7 @@ class Mainpage extends Component {
         )
     }
 }
-export default withUserContext(Mainpage)
+export default withNavigation(withUserContext(Mainpage))
 
 
 

@@ -14,7 +14,7 @@ export default class Loading extends React.Component {
                 Alert.alert("Please authenicate your email")
             }
             else {
-                this.props.navigation.navigate("Mainpage")
+                this.props.navigation.navigate("SN")
             }
         })
     }

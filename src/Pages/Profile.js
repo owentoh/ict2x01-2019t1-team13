@@ -77,6 +77,11 @@ export default class Profile extends Component {
             })
     }
 
+    logout = () =>{
+        firebase.auth().signOut();
+        this.props.navigation.navigate("Login")
+    }
+
     render() {
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -89,7 +94,7 @@ export default class Profile extends Component {
                     <Text style={styles.welcome}>Address:{this.state.Address}</Text>
 
                     <TouchableOpacity style={styles.button} //Log in
-                        onPress={this.viewprofile}>
+                        onPress={this.logout}>
                         <Text>Return to login page</Text>
                     </TouchableOpacity>
                 </View>
