@@ -16,6 +16,8 @@ import Inventory from './src/Pages/Inventory.js'
 import Mainpage from './src/Pages/Mainpage'
 import Profile from './src/Pages/Profile'
 import Shop from './src/Pages/Shop'
+import Loading from './src/Pages/Loading'
+import PreLoading from './src/Pages/PreLoading';
 
 export default class App extends Component {
   render() {
@@ -83,10 +85,12 @@ const SN = createSwitchNavigator(
     Leaderboard: { screen: Leaderboard },
     Mainpage : { screen: Mainpage },
     Shop : { screen: Shop },
-    Profile : { screen: Profile}
+    Profile : { screen: Profile},
+    Loading: { screen: Loading },
+    PreLoading: { screen: PreLoading }
   },
   {
-    initialRouteName: "Login"
+    initialRouteName: "PreLoading"
   }
 )
 const AppContainer = createAppContainer(SN);

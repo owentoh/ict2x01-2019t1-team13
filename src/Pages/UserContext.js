@@ -72,6 +72,7 @@ export class UserProvider extends React.Component {
                 console.log(increaseBy)
                 this.setState({currentStepCount: result.steps,
                     increaseStep: increaseBy});
+                this.addSteps(increaseBy)
             }
         });
     }
@@ -80,6 +81,12 @@ export class UserProvider extends React.Component {
         const db = firebase.firestore();
         const docUserProfile = db.collection("Game").doc("Toh_jin_wen@hotmail.com");
         docUserProfile.update({ Exp: firebase.firestore.FieldValue.increment(100) });
+    }
+
+    addSteps = (steps) =>{
+        const db = firebase.firestore();
+        const docUserProfile = db.collection("Game").doc("Toh_jin_wen@hotmail.com");
+        docUserProfile.update({ CurrentSteps: firebase.firestore.FieldValue.increment(steps) });
     }
 
     addRunes = () => {

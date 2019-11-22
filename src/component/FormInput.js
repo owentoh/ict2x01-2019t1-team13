@@ -16,29 +16,32 @@ const FormInput = ({
   <View style={styles.inputContainer}>
     <Input
       {...rest}
-      leftIcon={<Ionicons name={iconName} size={24} color={iconColor} />}
+      leftIcon={<Ionicons name={iconName} size={24} color={"white"} />}
       leftIconContainerStyle={styles.iconStyle}
       placeholderTextColor="white"
       name={name}
       value={value}
       placeholder={placeholder}
       style={styles.input}
+      
     />
   </View>
 )
 const styles = StyleSheet.create({
   inputContainer: {
     width: 300,
-    height: 40,
-    backgroundColor: 'rgba(255,255,255,0.3)',
+    height: 30,
     borderRadius: 25,
     paddingHorizontal: 18,
     fontSize: 15,
-    margin: 15
+    margin: 10,
   },
   iconStyle: {
     marginRight: 10
-    
+  },
+  input:
+  {
+    color:'white'
   }
 })
 export default FormInput

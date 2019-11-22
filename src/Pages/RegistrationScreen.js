@@ -8,19 +8,59 @@ import {
   TouchableOpacity,
   Alert
 } from 'react-native';
-import {TextValidator}from 'react-native-validator-form'
+
 import { Actions } from 'react-native-router-flux';
 import { TextInputMask } from 'react-native-masked-text';
+
+import { withNavigation } from 'react-navigation';
+import { UserProvider, withUserContext } from "./userContext";
+
 import firebase from './firestoreReference';
+import "@firebase/firestore";
 require("firebase/firestore");
 
-export default class Registration extends Component {
+import FormInput from '../component/FormInput'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import ErrorMessage from '../component/Errormessage'
 
-  constructor() {
-    super();
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .label('Email')
+    .email('Enter a valid email')
+    .required('Please enter a registered email'),
+  password: Yup.string()
+    .label('Password')
+    .required()
+    .min(6, 'Password must have more than 6 characters '),
+  Name: Yup.string()
+    .label('Name')
+    .required("Please enter your name"),
+  Username: Yup.string()
+    .label('Username')
+    .required("Please enter a Username"),
+  Address: Yup.string()
+    .label('Address')
+    .required("Please enter your address"),
+  DOB: Yup.date()
+    .label('DOB')
+    .required("Please enter your date of birth")
+})
+
+
+class Registration extends Component {
+
+  static contextType = UserProvider;
+
+  static navigationOptions = {
+    header: null
+  };
+
+  constructor(props) {
+    super(props);
+
     //initate the blank state
     this.state = {
-
       //User Profile 
       Username: '',
       Name: '',
@@ -28,53 +68,89 @@ export default class Registration extends Component {
       Address: '',
       Email: '',
       Password: '',
+
       //Game profile stats
       Damage: 0,
       CurrentSteps: 0,
-      Equipment:'',
-      Inventory: [ ],
-      Runes:0,
-      LifeTimeSteps:0,
+      Equipment: '',
+      Inventory: [],
+      Runes: 0,
+      LifeTimeSteps: 0,
     };
   }
 
+  handleUsernamelocalstate = (Username) => {
+    this.setState({ Username });
+  }
+
+  handlePasswordlocalstate = (Password) => {
+    this.setState({ Password })
+  };
+
+  handleEmaillocalstate = (Email) => {
+    this.setState({ Email })
+  };
+
+  handleDOBlocalstate = (DOB) => {
+    this.setState({ DOB });
+  }
+
+  handleNamelocalstate = (Name) => {
+    this.setState({ Name })
+  };
+
+  handleAddresslocalstate = (Address) => {
+    this.setState({ Address })
+  };
+
+  //Send verification Email
+  sendEmail() {
+    var user = firebase.auth().currentUser;
+    user.sendEmailVerification();
+  }
+
   //Register the user function
-  createAccount = () => {
-    const { Username, Password, Name, DOB, Email, Address,Damage,CurrentSteps,Equipment,Inventory,Runes,LifeTimeSteps } = this.state;
+  handleSubmit = values => {
+    const {
+      Username,
+      Password,
+      Name,
+      DOB,
+      Email,
+      Address,
 
-    if(Password.length<6)
-    {
-      Alert.alert('Please enter a password with at least 6 characters');
-    }
+      Damage,
+      CurrentSteps,
+      Equipment,
+      Inventory,
+      Runes,
+      LifeTimeSteps
+    } = this.state;
 
-    const expression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    this.handleUsernamelocalstate(values.Username);
+    this.handlePasswordlocalstate(values.password);
+    this.handleDOBlocalstate(values.DOB);
+    this.handleEmaillocalstate(values.email);
+    this.handleNamelocalstate(values.Name);
+    this.handleAddresslocalstate(values.Address);
 
-    if (expression.test(Email.toLowerCase())==false)
-    {
-      Alert.alert('Please enter a valid email address')
-    }
-
-    //connect to firestore
-    // const db = firebase.firestore();
-    // const UserRef = db.collection('User').where('Username','==', Username)
-    // if(UserRef)
-    // {
-    //   Alert.alert('Username has been taken. Please choose another username')
-    // }
-
-    firebase.auth().createUserWithEmailAndPassword(Email.trim(), Password)
+    firebase.auth().createUserWithEmailAndPassword(values.email, values.password)
       .then(() => {
         const db = firebase.firestore();
-        db.collection('Users').doc(Email).set(
+        console.log(values.email);
+        console.log(values.Username);
+        console.log(this.state.Username)
+        console.log(Username);
+        db.collection('Users').doc(values.email).set(
           {
-            Username,
-            Password,
-            Name,
-            DOB,
-            Email,
-            Address,
+            Username: this.state.Username,
+            Password: this.state.Password,
+            Name: this.state.Name,
+            DOB: this.state.DOB,
+            Email: this.state.Email,
+            Address: this.state.Address,
           });
-        db.collection('Game').doc(Email).set(
+        db.collection('Game').doc(values.email).set(
           {
             Damage,
             Equipment,
@@ -82,8 +158,8 @@ export default class Registration extends Component {
             Inventory,
             Runes,
             LifeTimeSteps,
-          }
-        )
+          });
+        firebase.auth().signOut()
         this.sendEmail();
         this.props.navigation.navigate("Login");
         Alert.alert('Success!!!', 'Please authenticate your account through your email')
@@ -92,111 +168,124 @@ export default class Registration extends Component {
         alert(error);
       });
   }
-  
-  //Send verification Email
-  sendEmail() {
-    var user = firebase.auth().currentUser;
-    user.sendEmailVerification();
-  }
-
-  //save current input state
-  Usernamelocalstate = (Username) => {
-    this.setState({ Username });
-  }
-
-  handlePasswordlocalstate = (Password) => {
-    this.setState({ Password })
-  };
-
-  handleDOBlocalstate = (DOB) => {
-    this.setState({ DOB })
-  };
-
-  handleAddresslocalstate = (Address) => {
-    this.setState({ Address })
-  };
-
-  handleEmaillocalstate = (Email) => {
-    this.setState({ Email })
-  };
-
-  handleNamelocalstate = (Name) => {
-    this.setState({ Name })
-  };
-
-  //for navigating back to login page
-  Login() {
-    Actions.Login()
-  }
 
   render() {
     return (
-      <KeyboardAvoidingView style={styles.container} //avoid being blocked 
-        behavior="padding">
-        <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <Formik
+          initialValues={{ email: '', password: '', DOB: '', Name: '', Address: '', Username: '' }}
+          onSubmit={values => {
+            this.handleSubmit(values)
+          }}
+          validationSchema={validationSchema}>
+          {({
+            handleChange,
+            values,
+            handleSubmit,
+            errors,
+            isValid,
+            touched,
+            handleBlur,
+            isSubmitting,
+          }) => (
+              <View style={styles.container}>
+                <Text style={styles.welcome}>Register an account</Text>
+                <FormInput
+                  name='Username'
+                  value={values.Username}
+                  onChangeText={handleChange('Username')}
+                  placeholder='Username'
+                  iconName='ios-person'
+                  iconColor='#2C384A'
+                  onBlur={handleBlur('Username')}
+                />
+                <ErrorMessage errorValue={touched.Username && errors.Username} />
 
-          <Text style={styles.welcome}>Register an account</Text>
+                <FormInput style={styles.text}
+                  name='password'
+                  value={values.password}
+                  onChangeText={handleChange('password')}
+                  placeholder='Password'
+                  secureTextEntry
+                  iconName='ios-lock'
+                  iconColor='#2C384A'
+                  onBlur={handleBlur('password')}
+                />
+                <ErrorMessage errorValue={touched.password && errors.password} />
 
-          <TextInput style={styles.inputbox} //username
-            placeholder='Username'
-            onChangeText={this.Usernamelocalstate}
-            value={this.state.Username}
-          />
+                <FormInput style={styles.text}
+                  name='Name'
+                  value={values.Name}
+                  onChangeText={handleChange('Name')}
+                  placeholder='Name'
+                  iconName='ios-person'
+                  iconColor='#2C384A'
+                  onBlur={handleBlur('Name')}
+                />
+                <ErrorMessage errorValue={touched.Name && errors.Name} />
 
-          <TextInput style={styles.inputbox} //password
-            placeholder='Password'
-            
-            keyboardType='default'
-            secureTextEntry={true}
-            onChangeText={this.handlePasswordlocalstate}
-            value={this.state.Password}
-          />
+                <FormInput style={styles.welcome}
+                  name='email'
+                  value={values.email}
+                  onChangeText={handleChange('email')}
+                  placeholder='Enter email'
+                  autoCapitalize='none'
+                  iconName='ios-mail'
+                  iconColor='white'
+                  onBlur={handleBlur('email')}
+                />
+                <ErrorMessage errorValue={touched.email && errors.email} />
 
-          <TextInput style={styles.inputbox} //Name
-            placeholder='Name'
-            onChangeText={Name => this.setState({ Name })}
-            onChangeText={this.handleNamelocalstate}
-            value={this.state.Name}
-          />
+                {/* <TextInputMask
+                  style={styles.inputbox} //DOB
+                  placeholder='Date of Birth'
+                  type={'datetime'}
+                  keyboardType='number-pad'
+                  options={{ format: 'DD/MM/YYYY' }}
+                  onChangeText={this.handleDOBlocalstate}
+                  value={this.state.DOB}
+                /> */}
 
-          <TextInput style={styles.inputbox} //Email
-            placeholder='Email'
-            keyboardType='email-address'
-            onChangeText={this.handleEmaillocalstate}
-            value={this.state.Email}
-          />
+                <FormInput
+                  name='DOB'
+                  value={values.DOB}
+                  onChangeText={handleChange('DOB')}
+                  placeholder='Date of birth'
+                  iconName='ios-calendar'
+                  iconColor='#2C384A'
+                  onBlur={handleBlur('DOB')}
+                />
+                <ErrorMessage errorValue={touched.DOB && errors.DOB} />
 
-          <TextInputMask
-            style={styles.inputbox} //DOB
-            placeholder='Date of Birth'
-            type={'datetime'}
-            keyboardType='number-pad'
-            options={{ format: 'DD/MM/YYYY' }}
-            onChangeText={this.handleDOBlocalstate}
-            value={this.state.DOB}
-          />
+                <FormInput style={styles.text}
+                  name='Address'
+                  value={values.Address}
+                  onChangeText={handleChange('Address')}
+                  placeholder='Address'
+                  iconName='ios-home'
+                  iconColor='#2C384A'
+                  onBlur={handleBlur('Address')}
+                />
+                <ErrorMessage errorValue={touched.Address && errors.Address} />
 
-          <TextInput style={styles.inputbox} //Address
-            placeholder='Home Address'
-            onChangeText={this.handleAddresslocalstate}
-            value={this.state.Address}
-          />
+                <TouchableOpacity style={styles.button} //Log in
+                  onPress={handleSubmit}>
+                  <Text>Submit</Text>
+                </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} //Log in
-            onPress={this.createAccount}>
-            <Text>Submit</Text>
-          </TouchableOpacity>
+                <TouchableOpacity style={styles.button} //Log in
+                  onPress={() => this.props.navigation.navigate("Login")}>
+                  <Text>Back</Text>
+                </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} //Log in
-            onPress={()=>this.props.navigation.navigate("Login")}>
-            <Text>Back</Text>
-          </TouchableOpacity>
-
-        </View>
+              </View>
+            )}
+        </Formik>
       </KeyboardAvoidingView>
     )
   }
 }
+export default withNavigation(withUserContext(Registration))
 
 //Design of the page
 const styles = StyleSheet.create({

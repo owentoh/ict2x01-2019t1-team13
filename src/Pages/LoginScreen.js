@@ -1,4 +1,4 @@
-import React, { Component, useContext, } from 'react';
+import React, { Component, useContext, useReducer, } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,11 +11,15 @@ import {
 } from 'react-native';
 
 
-import firebase from 'firebase';
+import { Actions } from 'react-native-router-flux';
+// import firebase from 'firebase';
+import firebase from './firestoreReference';
 import "@firebase/firestore";
+
 import { withNavigation} from 'react-navigation';
 import { UserProvider, withUserContext } from "./userContext";
 import { Ionicons } from '@expo/vector-icons'
+
 import FormInput from '../component/FormInput'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
@@ -51,6 +55,7 @@ class LoginScreen extends Component {
       Address: '',
       DOB: '',
       Name: '',
+      //UserData: props.UserProvider.UserData
     };
   }
 
@@ -66,10 +71,19 @@ class LoginScreen extends Component {
     this.setState({ Email })
   };
 
-  setName = (name) => {
-    this.props.userProvider.setContextData(name);
+  Mainpage(){
+    Actions.Mainpage()
   }
 
+  setName = (test) => {
+    this.props.userProvider.setContextData(test);
+  }
+
+  setUser = (test) => {
+   this.props.userProvider.setUserDetails(test);
+  }
+
+  //Login User
   handleSubmit = values => {
     const {
       Password,
@@ -86,15 +100,14 @@ class LoginScreen extends Component {
     firebase.auth().signInWithEmailAndPassword(values.email, values.password)
       .then(() => {
         const db = firebase.firestore();
-        const user = firebase.auth().currentUser.email;
-        db.collection("Users").doc(user).get()
+        const user = firebase.auth().currentUser;
+        console.log(user);
+        db.collection("Users").doc(values.email).get()
           .then(doc => {
-            const email = doc.data().Email;
-            this.state.Address = doc.data().Address;
-            console.log(email)
-            Alert.alert('Welcome ' + this.state.Email);
+            const em = doc.data().Username;
+            console.log(em)
           })
-        this.props.navigation.navigate("SN");
+        this.props.navigation.navigate("Loading");
         //Actions.Mainpage();
       }).catch((error) => {
         alert(error);
@@ -119,7 +132,8 @@ class LoginScreen extends Component {
             isValid,
             touched,
             handleBlur,
-            isSubmitting
+            isSubmitting,
+            style
           }) => (
               <View style={styles.container}>
 
@@ -128,16 +142,15 @@ class LoginScreen extends Component {
 
                 <Text style={styles.welcome}>Welcome to W.A.L.K</Text>
 
-                <FormInput
+                <FormInput style={styles.welcome}
                   name='email'
                   value={values.email}
                   onChangeText={handleChange('email')}
                   placeholder='Enter email'
                   autoCapitalize='none'
                   iconName='ios-mail'
-                  iconColor='#2C384A'
+                  iconColor='white'
                   onBlur={handleBlur('email')}
-                  autoFocus
                 />
                 <ErrorMessage errorValue={touched.email && errors.email} />
 
@@ -149,7 +162,7 @@ class LoginScreen extends Component {
                   placeholder='Enter password'
                   secureTextEntry
                   iconName='ios-lock'
-                  iconColor='#2C384A'
+                  iconColor='white'
                   onBlur={handleBlur('password')}
                 />
                 <ErrorMessage errorValue={touched.password && errors.password} />
@@ -165,10 +178,15 @@ class LoginScreen extends Component {
                   <Text>Sign Up</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} //tester 
-                  onPress={() => this.setName("admin")}>
-                  <Text>{this.props.userProvider.contextData}</Text>
-                </TouchableOpacity>
+              <TouchableOpacity style={styles.button} //tester 
+              onPress = {this.setName}>
+              <Text>change name</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.button} //tester 
+              onPress = {this.setName}>
+                <Text>{this.props.userProvider.contextData}</Text>
+              </TouchableOpacity>
 
 
 
@@ -224,8 +242,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: 'center',
     margin: 10,
-    color: 'white'
+    color: '#ffffff'
   }
-
-
 })
