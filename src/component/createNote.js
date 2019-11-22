@@ -6,14 +6,16 @@ require("firebase/firestore");
 class CreateNotes extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       title: '',
       message: '',
       duration: '',
-      lat: 1,
-      long:1,
-      headerText:'Create Note',
+      headerText: 'Create Note',
+      ready: false,
+      lat: null, 
+      lng: null,
+      error: null,
     };
   }
 
@@ -27,30 +29,49 @@ class CreateNotes extends React.Component {
       date:
         date + '/' + month + '/' + year,
     });
+    let geoOptions = {
+      enableHighAccuracy: true,
+      timeOut: 20000,
+      maximumAge: 60 * 60
+    };
+    this.setState({ ready: false, error: null });
+    navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoFailure, geoOptions);
   }
-  
+
+  geoSuccess = (position) => {
+    console.log(position.coords.latitude);
+
+    this.setState({
+      ready: true,
+      lat: position.coords.latitude, 
+      lng: position.coords.longitude,
+    })
+  }
+  geoFailure = (err) => {
+    this.setState({ error: err.message });
+  }
+
   createNote() {
-    const { title, message, duration, date, lat, long } = this.state;
+    const { title, message, duration, date, lat, lng } = this.state;
     var sChars = /[#%^*()_+\-=\[\]{};':"\\|,.<>\/]/;
-	
-    if(sChars.test(title)){ // Regex test
+    if (sChars.test(title)) { // Regex test
       Alert.alert('Error', 'Your title contains an invalid character, please enter another title.');
-    }else{
-    const db = firebase.firestore();
-    db.collection('Notes').doc(title).set(
-      {
-        date,
-        message,
-        duration,
-		long,
-		lat
-      });
-    
+    } else {
+      const db = firebase.firestore();
+      db.collection('Notes').doc(title).set(
+        {
+          date,
+          message,
+          duration,
+          lat,
+          lng,
+        });
+
       Alert.alert(
         'Note Status',
         'Note Successfully Created',
       );
-      }
+    }
   }
 
   render() {
