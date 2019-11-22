@@ -2,6 +2,7 @@ import React from 'react';
 import {Platform, StyleSheet, Text, View,TextInput,TouchableOpacity, Alert } from 'react-native';
 import Gmaptest from '../component/gmaptest'
 import Pedometer from '../component/pedometer'
+import Createnote from '../component/createNote'
 
 export default class MapScreen extends React.Component {
 
@@ -46,8 +47,8 @@ export default class MapScreen extends React.Component {
           <Text style={styles.buttonText}>Go</Text>
         </TouchableOpacity>
         <Gmaptest updateStartEnd={this.updateStartEnd} ref={child => { this.child = child }} {...this.props} />
-        <Pedometer/>
-
+        {/* <Pedometer/> */}
+        <Createnote/>
         {/* <Compass/> */}
       </View>
     );
