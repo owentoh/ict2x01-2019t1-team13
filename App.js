@@ -34,6 +34,12 @@ export default class App extends Component {
 //Bottom tab navigation
 const AppTab = createBottomTabNavigator(
   {
+    Mainpage: {
+      screen: Mainpage,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-home" size={24} color={tintColor} />
+      }
+    },
     Leaderboard: {
       screen: Leaderboard,
       navigationOptions: {
@@ -41,7 +47,7 @@ const AppTab = createBottomTabNavigator(
       }
     },
     MapScreen: {
-      screen:  MapScreen,
+      screen: MapScreen,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
       }
@@ -51,18 +57,12 @@ const AppTab = createBottomTabNavigator(
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-home" size={24} color={tintColor} />
       }
-    }, 
-    Mainpage: {
-      screen: Mainpage,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-home" size={24} color={tintColor} />
-      }
-    }, 
+    },
     Shop: {
       screen: Shop,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
-      } 
+      }
     },
     Profile: {
       screen: Profile,
@@ -79,13 +79,13 @@ const SN = createSwitchNavigator(
   {
     Login: { screen: LoginScreen },
     Register: { screen: Registration },
-    MapScreen: { screen: MapScreen },
+    //MapScreen: { screen: MapScreen },
     SN: { screen: AppTab },
-    Inventory: { screen: Inventory },
-    Leaderboard: { screen: Leaderboard },
-    Mainpage : { screen: Mainpage },
-    Shop : { screen: Shop },
-    Profile : { screen: Profile},
+    //Inventory: { screen: Inventory },
+    //Leaderboard: { screen: Leaderboard },
+    //Mainpage : { screen: Mainpage },
+    //Shop : { screen: Shop },
+    //Profile : { screen: Profile},
     Loading: { screen: Loading },
     PreLoading: { screen: PreLoading }
   },

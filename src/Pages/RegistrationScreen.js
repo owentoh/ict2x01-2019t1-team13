@@ -159,9 +159,8 @@ class Registration extends Component {
             Runes,
             LifeTimeSteps,
           });
-        firebase.auth().signOut()
+        this.props.navigation.navigate("Loading");
         this.sendEmail();
-        this.props.navigation.navigate("Login");
         Alert.alert('Success!!!', 'Please authenticate your account through your email')
       })
       .catch((error) => {
