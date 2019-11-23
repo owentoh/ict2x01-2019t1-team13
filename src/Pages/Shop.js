@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import {
   StyleSheet,
-  Text,
   View,
   TextInput,
   KeyboardAvoidingView,
@@ -14,6 +13,7 @@ import {
 } from 'react-native';
 import firebase from 'firebase'
 import {UserProvider,withUserContext} from './userContext';
+import { Container, Tab, TabHeading, Tabs, StyleProvider, Icon, Title, Header, Left, Body, Right, Button, Text} from 'native-base';
 
 require("firebase/firestore");
 
@@ -52,7 +52,7 @@ class Shop extends Component {
   }
   
   renderEquipment = (data) => {
-    return <TouchableOpacity style={{ backgroundColor: '#433a64' }} onPress={() => this.purchaseEquipment(this.props.userProvider.userDetails, data.item.name)}>
+    return <TouchableOpacity style={{ backgroundColor: '#fefefe' }} onPress={() => this.purchaseEquipment(this.props.userProvider.userDetails, data.item.name)}>
       <View style={styles.listItemContainer}>
         <Image source={require("../Images/plasticsword.png")} styles={styles.equipmentImage} />
         <Text style={styles.itemHeader}>{data.item.name}</Text>
@@ -159,11 +159,28 @@ class Shop extends Component {
   render() {
       if (!this.state.loading){
         return (  
-              <FlatList 
+          <Container>
+          <Header>
+          <Left>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Icon name='arrow-back' />
+              <Text>Back</Text>
+            </Button>
+          </Left>
+          <Body>
+            <Title>Shop</Title>
+          </Body>
+          <Right>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Text>Cancel</Text>
+            </Button>
+          </Right>
+        </Header>
+          <FlatList 
           data={this.state.equipmentList}
           renderItem={this.renderEquipment}
           keyExtractor={(item) => item.name} 
-          />)
+          /></Container>)
       }
       else {
         return (<ActivityIndicator/>)
