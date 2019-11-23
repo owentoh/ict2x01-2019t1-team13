@@ -53,9 +53,7 @@ export default class MapScreen extends React.Component {
           <Text style={styles.buttonText}>Go</Text>
         </TouchableOpacity>
         <Gmaptest updateStartEnd={this.updateStartEnd} ref={child => { this.child = child }} {...this.props} />
-        {/* <Pedometer/> */}
         <Createnote updateGmapNote={()=>this.child.updateNoteState()}/>
-        {/* <Compass/> */}
       </KeyboardAvoidingView>
     );
   }

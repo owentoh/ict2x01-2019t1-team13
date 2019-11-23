@@ -90,7 +90,7 @@ class gmaptest extends Component {
             var returnArray = []
             query.forEach(function (doc) {
               var item = doc.data();
-              tbp = {lat:item.lat, lng:item.lng};
+              tbp = {latitude:item.lat, longitude:item.lng};
               returnArray.push(tbp);
               });
               
@@ -147,7 +147,8 @@ class gmaptest extends Component {
 
     async searchRoutes(start, end) {
         if (start == "" || end == "") {
-            return "Please ensure start and end is filled up."
+            Alert.alert("Error","Please ensure start and end is filled up");
+            return;
         }
         try {
             retMsg = ""
@@ -229,8 +230,11 @@ class gmaptest extends Component {
                         <MapView.Marker key={`coordinate_${index}`} coordinate={coordinate} />
                     ))}
 
-                    {this.state.coordinates.map((coordinate, index) => (
-                        <MapView.Marker key={`coordinate_${index}`} coordinate={coordinate} />
+
+                    
+                    {this.state.noteArrayCoord.map((coordinate, index) => (
+                        <MapView.Marker key={`noteCoordinate_${index}`} coordinate={coordinate} 
+                        image={require('../Images/note.png')} />
                     ))}
                     {this.state.coordinates.length >= 2 && (
 
