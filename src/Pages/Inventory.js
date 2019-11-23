@@ -32,6 +32,7 @@ class Inventory extends Component {
     }
   }
 
+
   async componentDidMount(){
 
     const db = firebase.firestore();
