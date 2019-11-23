@@ -6,7 +6,8 @@ import {
     Image,
     TextInput,
     KeyboardAvoidingView,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 
 import { withNavigation } from 'react-navigation';
@@ -132,8 +133,7 @@ class Profile extends Component {
         this.handleAddresslocalstate(values.Address);
 
         //Update user account
-        var user = firebase.auth().currentUser;
-        user.updatePassword(values.password)
+        firebase.auth().currentUser.updatePassword(values.password)
           .then(() => {
             const db = firebase.firestore();
             db.collection('Users').doc(user).set(
@@ -143,8 +143,9 @@ class Profile extends Component {
                 Name: this.state.Name,
                 DOB: this.state.DOB,
                 Address: this.state.Address,
+                Email: this.state.Email
               });
-            this.props.navigation.navigate("Profile");
+            this.props.navigation.navigate("Mainpage");
             Alert.alert('Success!!!', 'You have updated your account details')
           })
           .catch((error) => {
