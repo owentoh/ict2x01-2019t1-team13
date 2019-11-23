@@ -4,6 +4,10 @@ import MapView from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import firebase from 'firebase'
+import {UserProvider,withUserContext} from '../Pages/userContext';
+
+require("firebase/firestore");
 // import { Pedometer } from "expo-sensors";
 // import { AssertionError } from "assert";
 
@@ -33,6 +37,8 @@ class gmaptest extends Component {
                 //     longitude: 1
                 // }
             ],
+            
+            noteArrayCoord:[],
             currentLocation: {latitude:0,longitude:0},
             location: null,
             errorMessage: null,
@@ -79,6 +85,27 @@ class gmaptest extends Component {
         console.log(this.state.errorMessage);
     }
 
+    async updateNoteState(){
+        const db = firebase.firestore();
+        await db.collection("Notes").get().then(function (query) {
+            var returnArray = []
+            query.forEach(function (doc) {
+              var item = doc.data();
+              tbp = {latitude:item.lat, longitude:item.lng};
+              returnArray.push(tbp);
+              });
+              
+
+            this.setState({noteArrayCoord: returnArray, loading: false});     
+            console.log(this.state.noteArrayCoord) 
+          }.bind(this));
+    }
+
+    async componentDidMount(){
+        await this.updateNoteState();
+          
+    }
+
     _getLocationAsync = async () => {
         // Checking device location permissions
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -121,7 +148,8 @@ class gmaptest extends Component {
 
     async searchRoutes(start, end) {
         if (start == "" || end == "") {
-            return "Please ensure start and end is filled up."
+            Alert.alert("Error","Please ensure start and end is filled up");
+            return;
         }
         try {
             retMsg = ""
@@ -195,12 +223,19 @@ class gmaptest extends Component {
                     initialRegion={{
                         latitude: 1.3521,
                         longitude: 103.8198,
-                        latitudeDelta: this.regionFrom(1.3521,103.8198).latitudeDelta,
-                        longitudeDelta:  this.regionFrom(1.3521,103.8198).longitudeDelta
+                        latitudeDelta: this.regionFrom(1.3521,103.8198).latitudeDelta, //hardcoded to show singapore 
+                        longitudeDelta:  this.regionFrom(1.3521,103.8198).longitudeDelta //hardcoded to show singapore
                     }}
                     ref={c => (this.mapView = c)}>
                     {this.state.coordinates.map((coordinate, index) => (
                         <MapView.Marker key={`coordinate_${index}`} coordinate={coordinate} />
+                    ))}
+
+
+                    
+                    {this.state.noteArrayCoord.map((coordinate, index) => (
+                        <MapView.Marker key={`noteCoordinate_${index}`} coordinate={coordinate} 
+                        image={require('../Images/note.png')} />
                     ))}
                     {this.state.coordinates.length >= 2 && (
 
@@ -229,7 +264,8 @@ class gmaptest extends Component {
                             }}
                             onReady={result => {
                                 if (result != null) {
-
+                                    this.props.userProvider.setJourneyStarted(true);
+                                    this.props.userProvider.setTotalDamage(this.props.userProvider.totalDamage * 1.5)
                                     console.log("Distance:" + result.distance + " km");
                                     console.log("Duration: " + result.duration + " min.");
                                     // console.log(result);

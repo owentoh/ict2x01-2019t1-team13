@@ -21,8 +21,10 @@ class Mainpage extends Component {
 
     componentDidMount(){
         //Retrieve equipment damage
+        user = firebase.auth().currentUser.email;
+        this.props.userProvider.setUserDetails(user)
         const db = firebase.firestore();
-        db.collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").get().then(function (query) {
+        db.collection("Game").doc(user).collection("inventory").get().then(function (query) {
             var countDamage = 1
             query.forEach(function (doc) {
                 if (doc.data().itemStatus == true) {
@@ -33,6 +35,7 @@ class Mainpage extends Component {
         }.bind(this));
         this.props.userProvider.setUserLoggedin(true)
     }
+
 
     constructor(props) {
         super(props);

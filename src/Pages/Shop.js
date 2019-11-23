@@ -46,7 +46,7 @@ class Shop extends Component {
   }
   
   renderEquipment = (data) => {
-    return <TouchableOpacity style={{ backgroundColor: '#433a64' }} onPress={() => this.purchaseEquipment("Toh_jin_wen@hotmail.com", data.item.name)}>
+    return <TouchableOpacity style={{ backgroundColor: '#433a64' }} onPress={() => this.purchaseEquipment(this.props.userProvider.userDetails, data.item.name)}>
       <View style={styles.listItemContainer}>
         <Image source={require("../Images/plasticsword.png")} styles={styles.equipmentImage} />
         <Text style={styles.itemHeader}>{data.item.name}</Text>

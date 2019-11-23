@@ -32,7 +32,7 @@ class Inventory extends Component {
   async componentDidMount(){
 
     const db = firebase.firestore();
-    db.collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").get().then(function (query) {
+    db.collection("Game").doc(this.props.userProvider.userDetails).collection("inventory").get().then(function (query) {
       var returnArray = []
       query.forEach(function (doc) {
         var item = doc.data();
@@ -56,12 +56,12 @@ class Inventory extends Component {
   }
 
   equip(name) {
-    firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").doc(name).update({ itemStatus: true });
+    firebase.firestore().collection("Game").doc(this.props.userProvider.userDetails).collection("inventory").doc(name).update({ itemStatus: true });
     Alert.alert("You have successfully equip the item");
   }
 
   unequip(name) {
-    firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").doc(name).update({ itemStatus: false });
+    firebase.firestore().collection("Game").doc(this.props.userProvider.userDetails).collection("inventory").doc(name).update({ itemStatus: false });
     Alert.alert("You have successfully unequip the item");
   }
 
