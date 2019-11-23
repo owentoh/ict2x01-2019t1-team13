@@ -79,6 +79,7 @@ class gmaptest extends Component {
             if(currentToDestDistance<300){
                 Alert.alert("Congratulations","Your route has ended!");
                 this.props.userProvider.setJourneyStarted(false);
+                this.state.coordinates.pop();
             }
         }
      
@@ -253,9 +254,9 @@ class gmaptest extends Component {
 
                     
                     {this.state.noteArrayCoord.map((coordinate, index) => (
-                        <MapView.Marker key={`noteCoordinate_${index}`} coordinate={coordinate} 
+                        <MapView.Marker key={`note_${index}`} coordinate={coordinate} 
                         image={require('../Images/note.png')}>
-                            <MapView.Callout >
+                            <MapView.Callout key={`callout_${index}`} >
                                 <View style={styles.calloutText}>
                                     <Text>{this.state.noteArray[index].message}</Text>
                                 </View>
