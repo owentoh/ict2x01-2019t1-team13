@@ -54,8 +54,8 @@ class CreateNotes extends React.Component {
   createNote() {
     const { title, message, duration, date, lat, lng } = this.state;
     var sChars = /[#%^*()_+\-=\[\]{};':"\\|,.<>\/]/;
-    if (sChars.test(title)) { // Regex test
-      Alert.alert('Error', 'Your title contains an invalid character, please enter another title.');
+    if (sChars.test(title) || title=="" || message == "") { // Regex test
+      Alert.alert('Error', 'Ensure all fields are properly filled up.');
     } else {
       const db = firebase.firestore();
       db.collection('Notes').doc(title).set(
@@ -71,6 +71,7 @@ class CreateNotes extends React.Component {
         'Note Status',
         'Note Successfully Created',
       );
+      this.props.updateGmapNote();
     }
   }
 

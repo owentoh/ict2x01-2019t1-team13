@@ -28,15 +28,15 @@ export class UserProvider extends React.Component {
         interval = setInterval(() => {
             if (this.state.userLoggedin){
                 //Retrieve equipment damage
-                const db = firebase.firestore();
-                db.collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").get().then(function (query) {
-                    var countDamage = 1
-                    query.forEach(function (doc) {
-                      if (doc.data().itemStatus == true) {
-                        countDamage += doc.data().damage;
-                      }})
-                      this.setState({ totalDamage : countDamage})
-                    }.bind(this));
+                // const db = firebase.firestore();
+                // db.collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").get().then(function (query) {
+                //     var countDamage = 1
+                //     query.forEach(function (doc) {
+                //       if (doc.data().itemStatus == true) {
+                //         countDamage += doc.data().damage;
+                //       }})
+                //       this.setState({ totalDamage : countDamage})
+                //     }.bind(this));
                 if (this.state.journeyStarted){
                     this.setState({ totalDamage : this.state.totalDamage * 1.5})
                 }

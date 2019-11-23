@@ -1,5 +1,5 @@
 import React from 'react';
-import {Platform, StyleSheet, Text, View,TextInput,TouchableOpacity, Alert } from 'react-native';
+import {Platform, StyleSheet, Text, KeyboardAvoidingView,TextInput,TouchableOpacity, Alert, View } from 'react-native';
 import Gmaptest from '../component/gmaptest'
 import Pedometer from '../component/pedometer'
 import Createnote from '../component/createNote'
@@ -13,6 +13,12 @@ export default class MapScreen extends React.Component {
       input_start: '',
       input_end: ''
     };
+  }
+
+  componentWIllMount(){
+    //Here i need to get all the coordinates and then put it into somewhere
+    //and then put it into the state
+
   }
 
   // 
@@ -33,7 +39,7 @@ export default class MapScreen extends React.Component {
       
     return (
 
-      <View style={styles.container}>
+      <KeyboardAvoidingView behavior="padding" style={styles.container}>
 
         {statusbar}
 
@@ -48,9 +54,9 @@ export default class MapScreen extends React.Component {
         </TouchableOpacity>
         <Gmaptest updateStartEnd={this.updateStartEnd} ref={child => { this.child = child }} {...this.props} />
         {/* <Pedometer/> */}
-        <Createnote/>
+        <Createnote updateGmapNote={()=>this.child.updateNoteState()}/>
         {/* <Compass/> */}
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

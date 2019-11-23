@@ -1,6 +1,6 @@
 {
   "urlRandomness": "jz-v57",
-  "hostType": "lan",
+  "hostType": "localhost",
   "lanType": "ip",
   "dev": true,
   "minify": false,
