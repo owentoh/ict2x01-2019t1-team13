@@ -5,6 +5,7 @@ import MapViewDirections from "react-native-maps-directions";
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import firebase from 'firebase'
+import {UserProvider,withUserContext} from '../Pages/userContext';
 
 require("firebase/firestore");
 // import { Pedometer } from "expo-sensors";
@@ -263,7 +264,7 @@ class gmaptest extends Component {
                             }}
                             onReady={result => {
                                 if (result != null) {
-
+                                    this.props.userProvider.setJourneyStarted(true);
                                     console.log("Distance:" + result.distance + " km");
                                     console.log("Duration: " + result.duration + " min.");
                                     // console.log(result);

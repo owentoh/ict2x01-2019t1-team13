@@ -3,8 +3,9 @@ import {Platform, StyleSheet, Text, KeyboardAvoidingView,TextInput,TouchableOpac
 import Gmaptest from '../component/gmaptest'
 import Pedometer from '../component/pedometer'
 import Createnote from '../component/createNote'
+import {UserProvider,withUserContext} from '../Pages/userContext';
 
-export default class MapScreen extends React.Component {
+class MapScreen extends React.Component {
 
   constructor() {
     super();
@@ -112,3 +113,5 @@ const styles = StyleSheet.create({
     borderRadius:1
   }
 });
+
+export default withUserContext(MapScreen);
