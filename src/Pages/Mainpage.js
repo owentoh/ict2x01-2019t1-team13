@@ -30,7 +30,7 @@ class Mainpage extends Component {
         db.collection("Game").doc(user).collection("inventory").get().then(function (query) {
             var countDamage = 1
             query.forEach(function (doc) {
-                if (doc.data().itemStatus == true) {
+                if (doc.data().itemStatus == "Unequipped") {
                     countDamage += doc.data().damage;
                 }
             })

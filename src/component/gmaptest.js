@@ -65,20 +65,22 @@ class gmaptest extends Component {
 
     async componentWillUpdate() {//will keep running update mapview here
         //Keep getting distance. and check if its near the end location
+        let geoOptions = {
+            enableHighAccuracy: true,
+            timeOut: 20000,
+            maximumAge: 60 * 60
+          };
+        navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoFailure, geoOptions);
         if(this.state.coordinates.length>1 && this.props.userProvider.journeyStarted){
             //keep checking if im near the destination location:
-            let geoOptions = {
-                enableHighAccuracy: true,
-                timeOut: 20000,
-                maximumAge: 60 * 60
-              };
+            
               //this.setState({ ready: false, error: null });
-              navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoFailure, geoOptions);
              
             var currentToDestDistance = getDistance(this.state.coordinates[1],this.state.currentLocation);
             if(currentToDestDistance<300){
                 Alert.alert("Congratulations","Your route has ended!");
                 this.props.userProvider.setJourneyStarted(false);
+                this.state.coordinates.pop();
                 this.state.coordinates.pop();
             }
         }
@@ -256,11 +258,13 @@ class gmaptest extends Component {
                     {this.state.noteArrayCoord.map((coordinate, index) => (
                         <MapView.Marker key={`note_${index}`} coordinate={coordinate} 
                         image={require('../Images/note.png')}>
+                            {getDistance(this.state.currentLocation,this.state.noteArrayCoord[index])<300?
                             <MapView.Callout key={`callout_${index}`} >
-                                <View style={styles.calloutText}>
-                                    <Text>{this.state.noteArray[index].message}</Text>
-                                </View>
-                            </MapView.Callout>
+                            <View style={styles.calloutText}>
+                                <Text>{this.state.noteArray[index].message}</Text>
+                            </View>
+                        </MapView.Callout>
+                            :false}
                         </MapView.Marker>
                     ))}
 

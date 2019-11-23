@@ -79,7 +79,7 @@ class Shop extends Component {
 
         //this.addEquipmentToInventory();
         //docUserProfile.update({ Inventory: firebase.firestore.FieldValue.arrayUnion(equipment) });
-        docUserProfile.collection("inventory").doc(equipment).set({name: equipment, itemStatus: false, damage: this.state.damage, cost: this.state.price });
+        docUserProfile.collection("inventory").doc(equipment).set({name: equipment, itemStatus: "Equipped", damage: this.state.damage, cost: this.state.price });
 
         //this.showPurchaseSuccess();
         Alert.alert("You have successfully purchased the item");
