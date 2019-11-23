@@ -21,17 +21,21 @@ class Mainpage extends Component {
 
     componentDidMount(){
         //Retrieve equipment damage
-        // const db = firebase.firestore();
-        // db.collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").get().then(function (query) {
-        //     var countDamage = 1
-        //     query.forEach(function (doc) {
-        //         if (doc.data().itemStatus == true) {
-        //             countDamage += doc.data().damage;
-        //         }
-        //     })
-        //     this.props.userProvider.setTotalDamage(countDamage)
-        // }.bind(this));
+        user = firebase.auth().currentUser.email;
+        this.props.userProvider.setUserDetails(user)
+        const db = firebase.firestore();
+        db.collection("Game").doc(user).collection("inventory").get().then(function (query) {
+            var countDamage = 1
+            query.forEach(function (doc) {
+                if (doc.data().itemStatus == true) {
+                    countDamage += doc.data().damage;
+                }
+            })
+            this.props.userProvider.setTotalDamage(countDamage)
+        }.bind(this));
+        this.props.userProvider.setUserLoggedin(true)
     }
+
 
     constructor(props) {
         super(props);

@@ -14,12 +14,13 @@ export class UserProvider extends React.Component {
         contextData: "tester2", //Default Value
         stepCount: "hello",
         journeyStarted: false,
-        userDetails: {},
+        userDetails: " ",
+        damage:1,
         totalDamage: 1,
         currentStepCount: 0,
         hp: 1000,
         increaseStep: 0,
-        userLoggedin: true
+        userLoggedin: false
     };
 
 
@@ -27,9 +28,6 @@ export class UserProvider extends React.Component {
         this._subscribe();
         interval = setInterval(() => {
             if (this.state.userLoggedin){
-                if (this.state.journeyStarted){
-                    this.setState({ totalDamage : this.state.totalDamage * 1.5})
-                }
                 console.log("my current damage", this.state.totalDamage)
                 if(this.state.increaseStep != 0){
                     this.setState({
@@ -39,8 +37,8 @@ export class UserProvider extends React.Component {
                 }
                 if(this.state.hp <= 0){
                     console.log("monster diedddddddddddddddddddddddddddd")
-                    this.addEXP()
-                    this.addRunes()
+                    this.addEXP(this.state.userDetails)
+                    this.addRunes(this.state.userDetails)
                     this.generateMob()
                 }
                 else {
@@ -62,26 +60,26 @@ export class UserProvider extends React.Component {
                 console.log(increaseBy)
                 this.setState({currentStepCount: result.steps,
                     increaseStep: increaseBy});
-                this.addSteps(increaseBy)
+                this.addSteps(increaseBy, this.state.userDetails)
             }
         });
     }
 
-    addEXP = () =>{
+    addEXP = (user) =>{
         const db = firebase.firestore();
-        const docUserProfile = db.collection("Game").doc("Toh_jin_wen@hotmail.com");
+        const docUserProfile = db.collection("Game").doc(user);
         docUserProfile.update({ Exp: firebase.firestore.FieldValue.increment(100) });
     }
 
-    addSteps = (steps) =>{
+    addSteps = (steps, user) =>{
         const db = firebase.firestore();
-        const docUserProfile = db.collection("Game").doc("Toh_jin_wen@hotmail.com");
+        const docUserProfile = db.collection("Game").doc(user);
         docUserProfile.update({ CurrentSteps: firebase.firestore.FieldValue.increment(steps) });
     }
 
-    addRunes = () => {
+    addRunes = (user) => {
         const db = firebase.firestore();
-        const docUserProfile = db.collection("Game").doc("Toh_jin_wen@hotmail.com");
+        const docUserProfile = db.collection("Game").doc(user);
         docUserProfile.update({ Runes: firebase.firestore.FieldValue.increment(10) });
     }
 
@@ -92,6 +90,11 @@ export class UserProvider extends React.Component {
     setTotalDamage = (damage) => {
         this.setState({totalDamage: damage})
     }
+
+    setDamage = (damage) => {
+        this.setState({damage: damage})
+    }
+
 
     setUserDetails = (user) => {
         this.setState({userDetails: user});
@@ -105,15 +108,9 @@ export class UserProvider extends React.Component {
         this.setState({journeyStarted: toggle})
     }
 
-    // equip(name) {
-    //     firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").doc(name).update({ itemStatus: true });
-    //     Alert.alert("You have successfully equip the item");
-    // }
-
-    // unequip(name) {
-    //     firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").doc(name).update({ itemStatus: false });
-    //     Alert.alert("You have successfully unequip the item");
-    // }
+    setUserLoggedin = (toggle) => {
+        this.setState({userLoggedin: toggle})
+    }
 
     getValues = () => {
         return {
@@ -121,6 +118,7 @@ export class UserProvider extends React.Component {
             stepCount: this.state.stepCount,
             journeyStarted: this.state.journeyStarted,
             userDetails: this.state.userDetails,
+            damage:this.state.damage,
             totalDamage: this.state.totalDamage,
             currentStepCount: this.state.currentStepCount,
             hp: this.state.hp,
@@ -129,13 +127,13 @@ export class UserProvider extends React.Component {
 
             
 
-
+            setDamage : this.setDamage,
             setUserDetails : this.setUserDetails,
             setContextData : this.setContextData,
             setJourneyStarted : this.setJourneyStarted,
             setTotalDamage : this.setTotalDamage,
-            equip : this.equip,
-            unequip : this.unequip
+            setUserLoggedin : this.setUserLoggedin,
+
         }
     }
 
