@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Container, Tab, TabHeading, Tabs, StyleProvider, Icon } from 'native-base';
-import { Platform, StyleSheet, Text, View, ActivityIndicator, FlatList, Image, Dimensions, Button, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { Container, Tab, TabHeading, Tabs, StyleProvider, Icon, Title, Header, Left, Body, Right, Button, Text} from 'native-base';
+import { Platform, StyleSheet, View, ActivityIndicator, FlatList, Image, Dimensions, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import Tab2 from './LeaderboardDamage';
 import Tab3 from './LeaderboardSteps';
 
@@ -42,7 +42,7 @@ const GamePost = ({gameDetails}) => {
   return (
       <View style={styles.textContainer}>
         <Text style={styles.usernameDetail}>{gameDetails.Username}</Text>
-        <Text style={styles.damageDetail}>{gameDetails.Damage}</Text>
+        <Text style={styles.damageDetail}>{gameDetails.Exp}</Text>
         <Text style={styles.stepDetail}>{gameDetails.CurrentSteps}</Text>
       </View>
   );
@@ -62,7 +62,7 @@ export default class Leaderboard extends React.Component {
 
   constructor() {
     super();
-    this.ref = firebase.firestore().collection("Game");
+    this.ref = firebase.firestore().collection("Game").orderBy("Username","asc");
     this.unsubscribe = null;
     this.state = {
       gamePosts: [],
@@ -81,12 +81,12 @@ export default class Leaderboard extends React.Component {
   onCollectionUpdate = (querySnapshot) => {
     const gamePosts = [];
     querySnapshot.forEach((doc) => {
-      const { CurrentSteps, Damage, Username, } = doc.data();
+      const { CurrentSteps, Exp, Username, } = doc.data();
       gamePosts.push({
         key: doc.id, // Document ID
         doc, // DocumentSnapshot
         CurrentSteps,
-        Damage,
+        Exp,
         Username,
       });
     });
@@ -101,7 +101,25 @@ export default class Leaderboard extends React.Component {
       return <View style={styles.loader}><ActivityIndicator size="large" color="#0000ff" /></View>;
     }
     return (
-    <SafeAreaView style={styles.container}>
+      <Container>
+    <View style={styles.container}>
+    <Header>
+          <Left>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Icon name='arrow-back' />
+              <Text>Back</Text>
+            </Button>
+          </Left>
+          <Body>
+            <Title>Leaderboard</Title>
+          </Body>
+          <Right>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Text>Cancel</Text>
+            </Button>
+          </Right>
+        </Header>
+
       <Tabs>
         <Tab heading={<TabHeading><Icon name='trophy'/></TabHeading>}>
         <ScrollView style={styles.scrollView}>
@@ -109,7 +127,7 @@ export default class Leaderboard extends React.Component {
           <View style={styles.leaderboardDetails}>
           <View style={styles.tableHeaderContainer}>
           <View style={styles.tableHeaderContainer1}><Text style={styles.textTableHeader1}>Username</Text></View>
-          <View style={styles.tableHeaderContainer2}><Text style={styles.textTableHeader2}>Total Damage</Text></View>
+          <View style={styles.tableHeaderContainer2}><Text style={styles.textTableHeader2}>Total Exp</Text></View>
           <View style={styles.tableHeaderContainer3}><Text style={styles.textTableHeader3}>Total Steps</Text></View>
           </View>
           <FlatList
@@ -126,7 +144,8 @@ export default class Leaderboard extends React.Component {
           <Tab3 />
         </Tab>
       </Tabs>  
-    </SafeAreaView>
+    </View>
+    </Container>
     );
   }
 }
@@ -184,7 +203,7 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#426585',
+    backgroundColor: '#433a64',
   },
 
   textTableHeader1: {

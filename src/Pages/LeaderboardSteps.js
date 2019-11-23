@@ -150,7 +150,7 @@ export default class LeaderboardSteps extends React.Component {
       height: 40,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#426585',
+      backgroundColor: '#433a64',
     },
   
     textTableHeader1: {
