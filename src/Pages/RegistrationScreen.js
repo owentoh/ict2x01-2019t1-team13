@@ -69,7 +69,7 @@ class Registration extends Component {
       Address: '',
       Email: '',
       Password: '',
-      Date: '',
+      Datecreated: '',
 
       //Game profile stats
       Damage: 0,
@@ -84,9 +84,10 @@ class Registration extends Component {
 
   componentDidMount() {
     var date = new Date().getDate();
-    var month = new Date().getMonth();
+    var month = new Date().getMonth()+1;
     var year = new Date().getFullYear();
-    this.state.date = date + '/' + month + '/' + year;
+    this.state.Datecreated = date.toString() + '/' + month.toString() + '/' + year.toString();
+    console.log(this.state.Date)
   }
 
   handleUsernamelocalstate = (Username) => {
@@ -160,7 +161,7 @@ class Registration extends Component {
             DOB: this.state.DOB,
             Email: this.state.Email,
             Address: this.state.Address,
-            Date: this.state.Date
+            Datecreated: this.state.Datecreated
           });
         db.collection('Game').doc(values.email).set(
           {

@@ -11,37 +11,59 @@ import {
 
 import { Actions } from 'react-native-router-flux';
 import firebase from 'firebase';
-import {withNavigation} from 'react-navigation';
+import { withNavigation } from 'react-navigation';
 import "@firebase/firestore";
-import { UserConsumer,UserProvider, withUserContext } from './userContext'
+import { UserConsumer, UserProvider, withUserContext } from './userContext'
 
 class Mainpage extends Component {
 
     //static contextType = UserProvider;
 
-    componentDidMount(){
-        //Retrieve equipment damage
-        user = firebase.auth().currentUser.email;
-        this.props.userProvider.setUserDetails(user)
-        const db = firebase.firestore();
-        db.collection("Game").doc(user).collection("inventory").get().then(function (query) {
-            var countDamage = 1
-            query.forEach(function (doc) {
-                if (doc.data().itemStatus == true) {
-                    countDamage += doc.data().damage;
-                }
-            })
-            this.props.userProvider.setTotalDamage(countDamage)
-        }.bind(this));
-        this.props.userProvider.setUserLoggedin(true)
-    }
 
 
     constructor(props) {
         super(props);
         this.state = {
-
+            CurrentSteps: '',
+            Exp: '',
+            Runes: ''
         };
+    }
+
+    handleCurrentStepslocalstate = (CurrentSteps) => {
+        this.setState({ CurrentSteps });
+    }
+
+    handleExplocalstate = (Exp) => {
+        this.setState({ Exp })
+    };
+
+    handleRuneslocalstate = (Runes) => {
+        this.setState({ Runes })
+    };
+
+    componentDidMount() {
+        user = firebase.auth().currentUser.email;
+        const db = firebase.firestore();
+        db.collection("Game").doc(user).get()
+            .then(doc => {
+                this.handleCurrentStepslocalstate(doc.data().CurrentSteps);
+                this.handleExplocalstate(doc.data().Exp);
+                this.handleRuneslocalstate(doc.data().Runes);
+            })
+
+
+        //Retrieve equipment damage
+        // const db = firebase.firestore();
+        // db.collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").get().then(function (query) {
+        //     var countDamage = 1
+        //     query.forEach(function (doc) {
+        //         if (doc.data().itemStatus == true) {
+        //             countDamage += doc.data().damage;
+        //         }
+        //     })
+        //     this.props.userProvider.setTotalDamage(countDamage)
+        // }.bind(this));
     }
 
     render() {
@@ -59,14 +81,22 @@ class Mainpage extends Component {
 
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding">
-                        <View style={styles.container}>
-        <Text style={styles.welcome}>Monster HP: {this.props.userProvider.hp} / 1000</Text>
-        <Text style={styles.welcome}>Current Damage: {this.props.userProvider.totalDamage}</Text>
+                <View style={styles.container}>
+                    <Text style={styles.welcome}>Monster HP: {this.props.userProvider.hp} / 1000</Text>
+                    <Text style={styles.welcome}>Current Damage: {this.props.userProvider.totalDamage}</Text>
 
-                            {monster}
-                        </View>
 
-                    
+                    {monster}
+
+                    <Text style={styles.welcome}>Game Stats</Text>
+                    <Text style={styles.welcome}>Current Steps: {this.state.CurrentSteps}</Text>
+                    <Text style={styles.welcome}>Total Exp: {this.state.Exp}</Text>
+                    <Text style={styles.welcome}>Total Runes: {this.state.Runes}</Text>
+
+
+                </View>
+
+
             </KeyboardAvoidingView>
         )
     }
