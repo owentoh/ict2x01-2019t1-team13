@@ -38,7 +38,7 @@ class MapScreen extends React.Component {
   }
 
   render() {
-      const statusbar = (Platform.OS == 'ios') ? <View style = {styles.iosstatusbar}></View> :<View style = {styles.androidstatusbar}></View>
+      // const statusbar = (Platform.OS == 'ios') ? <View style = {styles.iosstatusbar}></View> :<View style = {styles.androidstatusbar}></View>
       
     return (
       <Container>
@@ -61,7 +61,7 @@ class MapScreen extends React.Component {
           </Right>
         </Header>
 
-        {statusbar}
+        {/* {statusbar} */}
 
         <View style={styles.container2}>
           <Text style={flex = 1}>Start:</Text><TextInput clearTextOnFocus={true} autoFocus={true} onChangeText={a => this.setState({ input_start: a })} style={styles.searchInput} placeholder={this.state.input_start} value={this.state.input_start} />
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   container2: {
     // flex:0,
     flexDirection:"row",
-    backgroundColor:'#48BBEC',
+    backgroundColor:'white',
     alignItems: 'center',
     justifyContent: 'center',
     color:'#fff',
@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
   },
   button:{
     height:40,
-    backgroundColor:'black',
-    borderColor:'black',
+    backgroundColor:'#433a64',
+    borderColor:'#433a64',
     // marginLeft:10,
     // width:80,
     alignItems:'stretch',
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     fontSize:18,
     borderWidth:1,
     color:'black',
-    borderColor:'#48BBEC',
+    borderColor:'white',
     borderRadius:1
   }
 });

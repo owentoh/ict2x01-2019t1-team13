@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  Button,
+  //Button,
   Alert
 } from 'react-native';
 import firebase from 'firebase'
@@ -51,7 +51,6 @@ class Inventory extends Component {
   renderEquipment = (data) => {
     return <View>
       <View style={styles.card}>
-      {/* <View style={styles.listItemContainer}> */}
         <Image source={require("../Images/plasticsword.png")} styles={styles.equipmentImage} />
         <View style={styles.cardContent}>
         <Text style={styles.name}>Name: {data.item.name}</Text>
@@ -147,9 +146,9 @@ class Inventory extends Component {
             </Button>
           </Right>
         </Header>
-// =======
+{/* // =======
 //           <View style={styles.container}>
-// >>>>>>> dev
+// >>>>>>> dev */}
               <FlatList 
           data={this.state.equipmentList}
           renderItem={this.renderEquipment}
@@ -176,18 +175,18 @@ const styles = StyleSheet.create({
     marginTop:20,
     backgroundColor:"#eeeeee"
 },
-//   listItemContainer: {
-//     fontSize: 15,
-//     textAlign: 'center',
-//     margin: 10,
-//     color: 'white',
-//     borderStyle: 'solid',
-//     borderColor: '#fff',
-//     borderBottomWidth: 2,
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     padding: 20
-// },
+  listItemContainer: {
+    fontSize: 15,
+    textAlign: 'center',
+    margin: 10,
+    color: 'white',
+    borderStyle: 'solid',
+    borderColor: '#fff',
+    borderBottomWidth: 2,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 20
+},
 card:{
   shadowColor: '#00000021',
   shadowOffset: {
@@ -244,31 +243,31 @@ button:{
   flexDirection: 'row',
   justifyContent: 'space-between',
 },
-// equip:{
-//   //borderRadius: 30,
-//   //backgroundColor: "#f283a0",
-//   width: 50,
-//   height:50,
-//   flex: 1, 
+equip:{
+  //borderRadius: 30,
+  //backgroundColor: "#f283a0",
+  width: 50,
+  height:50,
+  flex: 1, 
 
-// },
-// unequip:{
+},
+unequip:{
 
-//   //borderRadius: 30,
-//   //backgroundColor: "red",
-//   width: 50,
-//   height:50,
-//   flex: 1, 
+  //borderRadius: 30,
+  //backgroundColor: "red",
+  width: 50,
+  height:50,
+  flex: 1, 
 
-// },
-// sell:{
-//   //borderRadius: 30,
-//   //backgroundColor: "#9fd6ff",
-//   width: 50,
-//   height:50,
-//   flex: 1, 
+},
+sell:{
+  //borderRadius: 30,
+  //backgroundColor: "#9fd6ff",
+  width: 50,
+  height:50,
+  flex: 1, 
 
-// },
+},
 separator: {
   marginVertical: 1,
   borderBottomColor: '#00000021',
