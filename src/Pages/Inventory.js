@@ -44,7 +44,9 @@ class Inventory extends Component {
         });
       this.setState({equipmentList: returnArray, loading: false});        
     }.bind(this));
+    console.log("STARTTTTTTTTTTTTTTTTTTTTTTTTTTT")
   }
+
   
   renderEquipment = (data) => {
     return <View>
@@ -57,9 +59,9 @@ class Inventory extends Component {
         <Text style={styles.status}>Damage: {data.item.damage}</Text>
         <Text style={styles.status}>Price: {data.item.cost}</Text>
           <View style={styles.button}>
-            <Button style={styles.equip} title="Equip" onPress={() => this.equip(data.item.name)} />
+            <Button style={styles.equip} title="Equip" onPress={() => this.equip(data.item.name, data.item.damage)} />
             <Separator />
-            <Button style={styles.unequip} title="Unequip" onPress={() => this.unequip(data.item.name)} />
+            <Button style={styles.unequip} title="Unequip" onPress={() => this.unequip(data.item.name, data.item.damage)} />
               <Separator />
             <Button style={styles.sell} title="Sell" onPress={() => this.sell(data.item.name, data.item.cost)} />
           </View>
@@ -68,14 +70,41 @@ class Inventory extends Component {
     </View>
   }
 
-  equip(name) {
+  equip(name, dmg) {
+    const status = firebase.firestore().collection("Game").doc(this.props.userProvider.userDetails).collection('inventory').doc(name)
     firebase.firestore().collection("Game").doc(this.props.userProvider.userDetails).collection("inventory").doc(name).update({ itemStatus: "Equipped" });
+    this.props.userProvider.setTotalDamage((this.props.userProvider.totalDamage + dmg))
     Alert.alert("You have successfully equip the item");
+    this.props.navigation.navigate("Inventory")
+
+    const db = firebase.firestore();
+    db.collection("Game").doc(this.props.userProvider.userDetails).collection("inventory").get().then(function (query) {
+      var returnArray = []
+      query.forEach(function (doc) {
+        var item = doc.data();
+        returnArray.push(item);
+        console.log(item)
+        });
+      this.setState({equipmentList: returnArray, loading: false});        
+    }.bind(this));
   }
 
-  unequip(name) {
+  unequip(name, dmg) {
     firebase.firestore().collection("Game").doc(this.props.userProvider.userDetails).collection("inventory").doc(name).update({ itemStatus: "Unequipped" });
+    this.props.userProvider.setTotalDamage((this.props.userProvider.totalDamage - dmg))
     Alert.alert("You have successfully unequip the item");
+    this.props.navigation.navigate("Inventory")
+
+    const db = firebase.firestore();
+    db.collection("Game").doc(this.props.userProvider.userDetails).collection("inventory").get().then(function (query) {
+      var returnArray = []
+      query.forEach(function (doc) {
+        var item = doc.data();
+        returnArray.push(item);
+        console.log(item)
+        });
+      this.setState({equipmentList: returnArray, loading: false});        
+    }.bind(this));
   }
 
   sell(name, cost) {
@@ -84,6 +113,17 @@ class Inventory extends Component {
     const db = firebase.firestore();
     db.collection('Game').doc(this.props.userProvider.userDetails).update({
     Runes: firebase.firestore.FieldValue.increment(cost)});
+    this.props.navigation.navigate("Inventory")
+
+    db.collection("Game").doc(this.props.userProvider.userDetails).collection("inventory").get().then(function (query) {
+      var returnArray = []
+      query.forEach(function (doc) {
+        var item = doc.data();
+        returnArray.push(item);
+        console.log(item)
+        });
+      this.setState({equipmentList: returnArray, loading: false});        
+    }.bind(this));
   }
 
   render() {

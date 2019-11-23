@@ -53,7 +53,7 @@ class Shop extends Component {
   }
   
   renderEquipment = (data) => {
-    return <TouchableOpacity style={{ backgroundColor: '#eeeeee' }} onPress={() => this.purchaseEquipment(this.props.userProvider.userDetails, data.item.name)}>
+    return <TouchableOpacity style={{ backgroundColor: '#eeeeee' }} onPress={() => this.purchaseEquipment(this.props.userProvider.userDetails, data.item.name, data.item.cost, data.item.damage)}>
       <View style={styles.card}>
       {/* <View style={styles.listItemContainer}> */}
         <Image source={require("../Images/plasticsword.png")} styles={styles.equipmentImage} />
@@ -66,15 +66,15 @@ class Shop extends Component {
     </TouchableOpacity>
   }
 
-  purchaseEquipment = (email, equipment) => {
+  purchaseEquipment = (email, equipment, cost, damage) => {
       //this.checkRunes();
       const db = firebase.firestore();
       const docUserProfile = db.collection("Game").doc(email);
 
       //this.getEquipmentPrice();
       const docEquipment = db.collection("Equipment").doc(equipment);
-      docEquipment.get().then(doc => this.setState({ price: doc.data().cost }));
-      docEquipment.get().then(doc => this.setState({ damage: doc.data().damage }));
+      //docEquipment.get().then(doc => this.setState({ price: doc.data().cost }));
+      //docEquipment.get().then(doc => this.setState({ damage: doc.data().damage }));
       //docEquipment.get().then(doc => this.setState({ url: doc.data().url }));
 
 
@@ -82,11 +82,11 @@ class Shop extends Component {
 
       if (this.state.runes >= this.state.price) {
         //this.minusRunes();
-        docUserProfile.update({ Runes: firebase.firestore.FieldValue.increment(-(this.state.price)) });
+        docUserProfile.update({ Runes: firebase.firestore.FieldValue.increment(-(cost)) });
 
         //this.addEquipmentToInventory();
         //docUserProfile.update({ Inventory: firebase.firestore.FieldValue.arrayUnion(equipment) });
-        docUserProfile.collection("inventory").doc(equipment).set({name: equipment, itemStatus: "Unequipped", damage: this.state.damage, cost: this.state.price });
+        docUserProfile.collection("inventory").doc(equipment).set({name: equipment, itemStatus: "Unequipped", damage: damage, cost: cost });
 
         //this.showPurchaseSuccess();
         Alert.alert("You have successfully purchased the item");
