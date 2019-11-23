@@ -3,6 +3,7 @@ import {Platform, StyleSheet, Text, KeyboardAvoidingView,TextInput,TouchableOpac
 import Gmaptest from '../component/gmaptest'
 import Pedometer from '../component/pedometer'
 import Createnote from '../component/createNote'
+import { getDistance } from 'geolib';
 
 export default class MapScreen extends React.Component {
 
@@ -11,18 +12,48 @@ export default class MapScreen extends React.Component {
     //this.updateStartEnd = this.updateStartEnd.bind(this);
     this.state = {
       input_start: '',
-      input_end: ''
+      input_end: '',
+      lat: null,
+      lng: null,
     };
   }
 
   componentWIllMount(){
     //Here i need to get all the coordinates and then put it into somewhere
     //and then put it into the state
+    let geoOptions = {
+      enableHighAccuracy: true,
+      timeOut: 20000,
+      maximumAge: 60 * 60
+    };
+    this.setState({ ready: false, error: null });
+    navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoFailure, geoOptions);
 
   }
+  geoSuccess = (position) => {
+    console.log(position.coords.latitude);
 
+    this.setState({
+      ready: true,
+      lat: position.coords.latitude, 
+      lng: position.coords.longitude,
+    })
+  }
+  geoFailure = (err) => {
+    this.setState({ error: err.message });
+  }
   // 
 
+  showNotes(){
+    firebase.database().ref('Notes/').once('value', function (snapshot) {
+      console.log(snapshot.val())
+
+      getDistance(
+        { latitude: 51.5103, longitude: 7.49347 },
+        { latitude: "51° 31' N", longitude: "7° 28' E" }
+    );
+  });
+  }
   
 
   // EndJourney(player){
