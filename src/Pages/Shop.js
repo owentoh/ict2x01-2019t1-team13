@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import {
   StyleSheet,
-  Text,
   View,
   TextInput,
   KeyboardAvoidingView,
@@ -14,6 +13,7 @@ import {
 } from 'react-native';
 import firebase from 'firebase'
 import {UserProvider,withUserContext} from './userContext';
+import { Container, Tab, TabHeading, Tabs, StyleProvider, Icon, Title, Header, Left, Body, Right, Button, Text} from 'native-base';
 
 require("firebase/firestore");
 
@@ -28,7 +28,8 @@ class Shop extends Component {
       equipmentList : [],
       loading: true,
       damage: 0,
-      totalDamage: 0
+      totalDamage: 0,
+      url: " "
     }
   }
 
@@ -52,34 +53,33 @@ class Shop extends Component {
   }
   
   renderEquipment = (data) => {
-    return <TouchableOpacity style={{ backgroundColor: '#433a64' }} onPress={() => this.purchaseEquipment(this.props.userProvider.userDetails, data.item.name)}>
+    return <TouchableOpacity style={{ backgroundColor: '#fefefe' }} onPress={() => this.purchaseEquipment(this.props.userProvider.userDetails, data.item.name, data.item.cost, data.item.damage)}>
       <View style={styles.listItemContainer}>
+
         <Image source={require("../Images/plasticsword.png")} styles={styles.equipmentImage} />
-        <Text style={styles.itemHeader}>{data.item.name}</Text>
-        <Text>Cost: {data.item.cost} Runes</Text>
-        <Text>Damage: {data.item.damage}</Text>
+          <View style={styles.cardContent}>
+            <Text style={styles.itemHeader}>Name: {data.item.name}</Text>
+            <Text>Cost: {data.item.cost} Runes</Text>
+            <Text>Damage: {data.item.damage}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   }
 
-  purchaseEquipment = (email, equipment) => {
+  purchaseEquipment = (email, equipment, cost, damage) => {
       //this.checkRunes();
       const db = firebase.firestore();
       const docUserProfile = db.collection("Game").doc(email);
 
       //this.getEquipmentPrice();
       const docEquipment = db.collection("Equipment").doc(equipment);
-      docEquipment.get().then(doc => this.setState({ price: doc.data().cost }));
-      docEquipment.get().then(doc => this.setState({ damage: doc.data().damage }));
-      
 
       if (this.state.runes >= this.state.price) {
         //this.minusRunes();
-        docUserProfile.update({ Runes: firebase.firestore.FieldValue.increment(-(this.state.price)) });
+        docUserProfile.update({ Runes: firebase.firestore.FieldValue.increment(-(cost)) });
 
         //this.addEquipmentToInventory();
-        //docUserProfile.update({ Inventory: firebase.firestore.FieldValue.arrayUnion(equipment) });
-        docUserProfile.collection("inventory").doc(equipment).set({name: equipment, itemStatus: "Unequipped", damage: this.state.damage, cost: this.state.price });
+        docUserProfile.collection("inventory").doc(equipment).set({name: equipment, itemStatus: "Unequipped", damage: damage, cost: cost });
 
         //this.showPurchaseSuccess();
         Alert.alert("You have successfully purchased the item");
@@ -93,59 +93,21 @@ class Shop extends Component {
 
 
   listOfEquipment = () => {
-    //Object.entries(peopleFromFirebase).map(item => ({...item[1], key: item[0]}));
 
     const db = firebase.firestore();
-    //return db.collection("Equipment").get();
     db.collection("Equipment").get().then(function (query) {
       var returnArray = []
       query.forEach(function (doc) {
-        //console.log("pushing");
         var item = doc.data();
-        //console.log(doc.data());
-        //item.key = doc.key;
         returnArray.push(item);
-        //this.state.equipmentList.push([doc.id, doc.data().name, doc.data().cost, doc.data().damage]);
         console.log(doc.id, " => ", doc.data().name);
         });
         this.setState({equipmentList: returnArray, loading: false});
-        //return returnArray;
     })
-  //return <Text>{doc.id}</Text>;
   
   }
 
-  addEquipmentToInventory = (username, equipment) => {
-    const db = firebase.firestore();
-    const useref = db.collection('Profile').doc(username);
-    useref.update({
-      Inventory: firebase.firestore.FieldValue.arrayUnion(equipment)
-    });
 
-  }
-
-
-  getEquipmentPrice = async (equipment) => {
-    const db = await firebase.firestore();
-    const docRef = await db.collection("Equipment").doc(equipment);
-    await docRef.get().then(doc => this.setState({ price: doc.data().cost }))
-    console.log(this.state.price);
-  }
-
-
-  checkRunes = async (username) => {
-    const db = firebase.firestore();
-    const docRef = db.collection("Profile").doc(username);
-    await docRef.get().then(doc => this.setState({ runes: doc.data().Runes }))
-  };
-
-
-  minusRunes = (username, price) => {
-    const db = firebase.firestore();
-    const useref = db.collection('Profile').doc(username).update({
-      Runes: firebase.firestore.FieldValue.increment(price)
-    });
-  }
 
   showPurchaseSuccess = (text) => {
     Alert.alert(text);
@@ -159,11 +121,28 @@ class Shop extends Component {
   render() {
       if (!this.state.loading){
         return (  
-              <FlatList 
+          <Container>
+          <Header>
+          <Left>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Icon name='arrow-back' />
+              <Text>Back</Text>
+            </Button>
+          </Left>
+          <Body>
+            <Title>Shop</Title>
+          </Body>
+          <Right>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Text>Cancel</Text>
+            </Button>
+          </Right>
+        </Header>
+          <FlatList 
           data={this.state.equipmentList}
           renderItem={this.renderEquipment}
           keyExtractor={(item) => item.name} 
-          />)
+          /></Container>)
       }
       else {
         return (<ActivityIndicator/>)
@@ -175,20 +154,43 @@ export default withUserContext(Shop);
 
 //Design of the page
 const styles = StyleSheet.create({
-  listItemContainer: {
-    fontSize: 15,
-    textAlign: 'center',
-    margin: 10,
-    color: 'white',
-    borderStyle: 'solid',
-    borderColor: '#fff',
-    borderBottomWidth: 2,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 20
+//   listItemContainer: {
+//     fontSize: 15,
+//     textAlign: 'center',
+//     margin: 10,
+//     color: 'white',
+//     borderStyle: 'solid',
+//     borderColor: '#fff',
+//     borderBottomWidth: 2,
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     padding: 20
+// },
+card:{
+  shadowColor: '#00000021',
+  shadowOffset: {
+    width: 0,
+    height: 30,
+    flex: 1,
+  },
+  shadowOpacity: 0.37,
+  shadowRadius: 7.49,
+  elevation: 12,
+
+  marginVertical: 10,
+  marginHorizontal:20,
+  backgroundColor:"white",
+  flexBasis: '46%',
+  padding: 10,
+  flexDirection:'row'
+},
+
+cardContent: {
+  marginLeft:20,
+  marginTop:10
 },
 itemHeader: {  
-    color: '#fff',
+    color: 'black',
     fontSize: 20,
 },
 equipmentImage: {
@@ -200,79 +202,3 @@ equipmentImage: {
 
 });
 
-
-  
-
-  /*
-  testOne(){
-    var assert = require('assert');
-    var beforePurchaseRunes = checkRunes(poorGuy);
-    var beforePurchaseInv = getEquipment(poorGuy).count;
-    purchaseEquipment(poorGuy, expensiveSword); // player who have 10 Runes buying 10,000 Runes sword
-    assert.equal(checkRunes(poorGuy), 10);
-    assert.equal(this.state.price, 10000);
-    assert.equal(checkRunes(poorGuy), beforePurchaseRunes);
-    assert.equal(getEquipment(poorGuy, expensiveSword), null);
-    assert.equal(getEquipment(poorGuy).count, beforePurchaseInv);
-    assert.equal(getLog(), "You do not have sufficient Runes");
-  }
-
-  testTwo(){
-    var assert = require('assert');
-    var beforePurchaseRunes = checkRunes(richGuy);
-    var beforePurchaseInv = getEquipment(richGuy).count;
-    purchaseEquipment(richGuy, cheapSword); // player who have 1 million Runes buying 100 Runes sword
-    assert.equal(checkRunes(richGuy), 999,900);
-    assert.equal(this.state.price, 100);
-    assert.equal((checkRunes(richGuy) + this.state.price), beforePurchaseRunes);
-    assert.notEqual(getEquipment(richGuy, cheapSword), null);
-    assert.equal((getEquipment(richGuy).count - 1), beforePurchaseInv);
-    assert.equal(getLog(), "You have successfully purchased the item");
-  }
-  
-  
-  testThree(){
-    var assert = require('assert');
-    assert.equal(listOfEquipment().count, 10);
-  }
-
-    testFour(){
-      var assert = require('assert');
-      assert.equal(addEquipmentToInventory("walkerKing93", "Gold sword"), );
-    }
-
-  
-  testFive(){
-    var assert = require('assert');
-    assert.equal(getEquipmentPrice("Metal sword"), 5000);
-  }
-
-    testSix(){
-      var assert = require('assert');
-      assert.equal(checkRunes("walkerKing93"), 1000000);
-    }
-  
-
-  
-    testSeven(){ 
-      var assert = require('assert');
-      minusRunes("walkerKing93", 500000);
-      assert.equal(checkRunes("walkerKing93"), 500000);
-    }
-
-    testEight(){
-      var assert = require('assert');
-      assert.equal(showPurchaseSuccess("You have successfully purchased the item"), "You have successfully purchased the item");
-    }
-
-    testEight(){
-      var assert = require('assert');
-      assert.equal(showPurchaseSuccess("You have successfully purchased the item"), "You have successfully purchased the item");
-    }
-
-  testNine(){
-    var assert = require('assert');
-    assert.equal(showPurchaseSuccess("You do not have sufficient Runes"), "You do not have sufficient Runes");
-  }
-  
-*/

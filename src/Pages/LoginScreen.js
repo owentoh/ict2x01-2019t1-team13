@@ -178,18 +178,6 @@ class LoginScreen extends Component {
                   <Text>Sign Up</Text>
                 </TouchableOpacity>
 
-              <TouchableOpacity style={styles.button} //tester 
-              onPress = {this.setName}>
-              <Text>change name</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.button} //tester 
-              onPress = {() => this.props.navigation.navigate("Mainpage")}>
-                <Text>Mainpage hack</Text>
-              </TouchableOpacity>
-
-
-
               </View>
             )}
         </Formik>

@@ -35,7 +35,7 @@ const GamePost = ({gameDetails}) => {
   return (
       <View style={styles.textContainer}>
         <Text style={styles.idDetail}>{gameDetails.Username}</Text>
-        <Text style={styles.damageDetail}>{gameDetails.Damage}</Text>
+        <Text style={styles.damageDetail}>{gameDetails.Exp}</Text>
       </View>
   );
 };
@@ -44,7 +44,7 @@ export default class LeaderboardDamage extends React.Component {
 
   constructor() {
     super();
-    this.ref = (firebase.firestore().collection("Game")).orderBy("Damage","desc").limit(5);
+    this.ref = (firebase.firestore().collection("Game")).orderBy("Exp","desc").limit(5);
     this.unsubscribe = null;
     this.state = {
       gamePosts: [],
@@ -63,11 +63,11 @@ export default class LeaderboardDamage extends React.Component {
   onCollectionUpdate = (querySnapshot) => {
     const gamePosts = [];
     querySnapshot.forEach((doc) => {
-      const { Damage, Username, } = doc.data();
+      const { Exp, Username, } = doc.data();
       gamePosts.push({
         key: doc.id, // Document ID
         doc, // DocumentSnapshot
-        Damage,
+        Exp,
         Username
       });
     });
@@ -84,7 +84,7 @@ export default class LeaderboardDamage extends React.Component {
       return (
       <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
-            <Text style={styles.textHeader}>Top 5 Player Highest Damage</Text>
+            <Text style={styles.textHeader}>Top 5 Player Highest Exp</Text>
             <View style={styles.leaderboardDetails}>
             <View style={styles.tableHeaderContainer}>
             <View style={styles.tableHeaderContainer1}><Text style={styles.textTableHeader1}>Username</Text></View>
@@ -149,7 +149,7 @@ export default class LeaderboardDamage extends React.Component {
       height: 40,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#426585',
+      backgroundColor: '#433a64',
     },
   
     textTableHeader1: {

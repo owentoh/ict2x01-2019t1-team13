@@ -34,34 +34,34 @@ export default class App extends Component {
 //Bottom tab navigation
 const AppTab = createBottomTabNavigator(
   {
+    Leaderboard: {
+      screen: Leaderboard,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-trophy" size={24} color={tintColor} />
+      }
+    },
+    Shop: {
+      screen: Shop,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-cart" size={24} color={tintColor} />
+      }
+    },
     Mainpage: {
       screen: Mainpage,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-home" size={24} color={tintColor} />
       }
     },
-    Leaderboard: {
-      screen: Leaderboard,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
-      }
-    },
     MapScreen: {
       screen: MapScreen,
       navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
+        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-navigate" size={24} color={tintColor} />
       }
     },
     Inventory: {
       screen: Inventory,
       navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-home" size={24} color={tintColor} />
-      }
-    },
-    Shop: {
-      screen: Shop,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
+        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-shirt" size={24} color={tintColor} />
       }
     },
     Profile: {

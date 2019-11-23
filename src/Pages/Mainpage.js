@@ -46,6 +46,7 @@ class Mainpage extends Component {
     }
 
 
+
     constructor(props) {
         super(props);
         this.state = {
@@ -85,8 +86,7 @@ class Mainpage extends Component {
             <KeyboardAvoidingView style={styles.container} behavior="padding">
                 <View style={styles.container}>
                     <Text style={styles.welcome}>Monster HP: {this.props.userProvider.hp} / 1000</Text>
-                    <Text style={styles.welcome}>Current Damage: {this.props.userProvider.totalDamage}</Text>
-
+                    <Text style={styles.welcome}>Player Damage: {this.props.userProvider.totalDamage}</Text>
 
                     {monster}
 
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#433a64',
+        backgroundColor: '#fefefe',
     },
     inputbox:
     {
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         textAlign: 'center',
         margin: 10,
-        color: '#ffffff',
+        color: 'black',
     },
 
     button:

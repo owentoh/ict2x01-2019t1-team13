@@ -80,6 +80,7 @@ class gmaptest extends Component {
             if(currentToDestDistance<300){
                 Alert.alert("Congratulations","Your route has ended!");
                 this.props.userProvider.setJourneyStarted(false);
+                this.props.userProvider.setTotalDamage(this.props.userProvider.totalDamage / 1.5)
                 this.state.coordinates.pop();
                 this.state.coordinates.pop();
             }
@@ -295,8 +296,10 @@ class gmaptest extends Component {
                             }}
                             onReady={result => {
                                 if (result != null) {
-                                    this.props.userProvider.setJourneyStarted(true);
-                                    this.props.userProvider.setTotalDamage(this.props.userProvider.totalDamage * 1.5)
+                                    if(!this.props.userProvider.journeyStarted){
+                                        this.props.userProvider.setTotalDamage(this.props.userProvider.totalDamage * 1.5)
+                                        this.props.userProvider.setJourneyStarted(true);
+                                    }
                                     console.log("Distance:" + result.distance + " km");
                                     console.log("Duration: " + result.duration + " min.");
                                     // console.log(result);
