@@ -19,23 +19,51 @@ class Mainpage extends Component {
 
     //static contextType = UserProvider;
 
+    componentDidMount(){
+        //Retrieve equipment damage
+        user = firebase.auth().currentUser.email;
+        this.props.userProvider.setUserDetails(user)
+        const db = firebase.firestore();
+        db.collection("Game").doc(user).collection("inventory").get().then(function (query) {
+            var countDamage = 1
+            query.forEach(function (doc) {
+                if (doc.data().itemStatus == true) {
+                    countDamage += doc.data().damage;
+                }
+            })
+            this.props.userProvider.setTotalDamage(countDamage)
+        }.bind(this));
+        this.props.userProvider.setUserLoggedin(true)
+    }
+
 
     constructor(props) {
         super(props);
         this.state = {
+
         };
-        
     }
 
     render() {
+        let monster
+        if (this.props.userProvider.hp <= 0) {
+            monster = <Image source={require('../Images/monsterDead.png')} />
+        }
+        else if (this.props.userProvider.increaseStep == 0) {
+            monster = <Image source={require('../Images/monsterStand.png')} />
+        }
+        else {
+            monster = <Image source={require('../Images/monsterHit.png')} />
+        }
+
+
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding">
                         <View style={styles.container}>
-                            <Text style={styles.welcome}>Welcome to W.A.L.K {this.props.userProvider.contextData} Mainpage</Text>
-                            <TouchableOpacity style={styles.button} //Log in
-                                onPress={() => this.props.navigation.navigate("Login")}>
-                                <Text>Logout</Text>
-                            </TouchableOpacity>
+        <Text style={styles.welcome}>Monster HP: {this.props.userProvider.hp} / 1000</Text>
+        <Text style={styles.welcome}>Current Damage: {this.props.userProvider.totalDamage}</Text>
+
+                            {monster}
                         </View>
 
                     
@@ -43,7 +71,7 @@ class Mainpage extends Component {
         )
     }
 }
-export default withUserContext(Mainpage)
+export default withNavigation(withUserContext(Mainpage))
 
 
 

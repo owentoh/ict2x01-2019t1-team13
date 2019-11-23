@@ -9,26 +9,254 @@ import {
     TouchableOpacity
 } from 'react-native';
 
+import { withNavigation } from 'react-navigation';
+import { UserProvider, withUserContext } from "./userContext";
+
 import firebase from 'firebase';
 import "@firebase/firestore";
 
-export default class Profile extends Component {    
+import FormInput from '../component/FormInput'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import ErrorMessage from '../component/Errormessage'
+
+const validationSchema = Yup.object().shape({
+    email: Yup.string()
+        .label('Email')
+        .email('Enter a valid email')
+        .required('Please enter a registered email'),
+    password: Yup.string()
+        .label('Password')
+        .required()
+        .min(6, 'Password must have more than 6 characters '),
+    Name: Yup.string()
+        .label('Name')
+        .required("Please enter your name"),
+    Username: Yup.string()
+        .label('Username')
+        .required("Please enter a Username"),
+    Address: Yup.string()
+        .label('Address')
+        .required("Please enter your address"),
+    DOB: Yup.date()
+        .label('DOB')
+        .required("Please enter your date of birth")
+})
+
+class Profile extends Component {
+
+    constructor(props) {
+        super(props);
+
+        //initate the blank state
+        this.state = {
+            //User Profile 
+            Username: '',
+            Name: '',
+            DOB: '',
+            Address: '',
+            Email: '',
+            Password: '',
+        };
+    }
+
+    handleUsernamelocalstate = (Username) => {
+        this.setState({ Username });
+    }
+
+    handlePasswordlocalstate = (Password) => {
+        this.setState({ Password })
+    };
+
+    handleEmaillocalstate = (Email) => {
+        this.setState({ Email })
+    };
+
+    handleDOBlocalstate = (DOB) => {
+        this.setState({ DOB });
+    }
+
+    handleNamelocalstate = (Name) => {
+        this.setState({ Name })
+    };
+
+    handleAddresslocalstate = (Address) => {
+        this.setState({ Address })
+    };
+
+    componentDidMount() {
+        user = firebase.auth().currentUser.email;
+        const db = firebase.firestore();
+        db.collection("Users").doc(user).get()
+            .then(doc => {
+                //Saving database data into local state
+                this.handleUsernamelocalstate(doc.data().Username);
+                this.handleEmaillocalstate(doc.data().Email);
+                this.handleDOBlocalstate(doc.data().DOB);
+                this.handleNamelocalstate(doc.data().Name);
+                this.handleAddresslocalstate(doc.data().Address);
+                this.handlePasswordlocalstate(doc.data().Password);
+                console.log(doc.data().Username)
+                console.log(this.state.Username)
+            })
+    }
+
+    logout = () =>{
+        firebase.auth().signOut();
+        this.props.navigation.navigate("PreLoading")
+    }
+
+    handleSubmit = values => {
+        const {
+          Username,
+          Password,
+          Name,
+          DOB,
+          Email,
+          Address,
+    
+          Damage,
+          CurrentSteps,
+          Equipment,
+          Inventory,
+          Runes,
+          LifeTimeSteps,
+          Exp
+        } = this.state;
+    
+        this.handleUsernamelocalstate(values.Username);
+        this.handlePasswordlocalstate(values.password);
+        this.handleDOBlocalstate(values.DOB);
+        this.handleEmaillocalstate(values.email);
+        this.handleNamelocalstate(values.Name);
+        this.handleAddresslocalstate(values.Address);
+
+        //Update user account
+        var user = firebase.auth().currentUser;
+        user.updatePassword(values.password)
+          .then(() => {
+            const db = firebase.firestore();
+            db.collection('Users').doc(user).set(
+              {
+                Username: this.state.Username,
+                Password: this.state.Password,
+                Name: this.state.Name,
+                DOB: this.state.DOB,
+                Address: this.state.Address,
+              });
+            this.props.navigation.navigate("Profile");
+            Alert.alert('Success!!!', 'You have updated your account details')
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      }
+
     render() {
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding">
-                <View style={styles.container}>
+                <Formik
+                    enableReinitialize={true}
+                    initialValues={{
+                        email: this.state.Email, password: this.state.Password, DOB: this.state.DOB, Name: this.state.Name,
+                        Address: this.state.Address, Username: this.state.Username 
+                    }}
+                    onSubmit={values => {
+                        this.handleSubmit(values)
+                    }}
+                    validationSchema={validationSchema}>
+                    {({
+                        handleChange,
+                        values,
+                        handleSubmit,
+                        errors,
+                        isValid,
+                        touched,
+                        handleBlur,
+                        isSubmitting,
+                    }) => (
+                            <View style={styles.container}>
+                                <Text style={styles.welcome}>Update account</Text>
+                                <FormInput
+                                    name='Username'
+                                    value={values.Username}
+                                    onChangeText={handleChange('Username')}
+                                    iconName='ios-person'
+                                    iconColor='#2C384A'
+                                    onBlur={handleBlur('Username')}
+                                />
+                                <ErrorMessage errorValue={touched.Username && errors.Username} />
 
-                    <Text style={styles.welcome}>Welcome to Shop</Text>
+                                <FormInput style={styles.text}
+                                    name='password'
+                                    value={values.password}
+                                    onChangeText={handleChange('password')}
+                                    iconName='ios-lock'
+                                    iconColor='#2C384A'
+                                    onBlur={handleBlur('password')}
+                                />
+                                <ErrorMessage errorValue={touched.password && errors.password} />
 
-                    <TouchableOpacity style={styles.button} //Log in
-                        onPress={this.login}>
-                        <Text>Return to login page</Text>
-                    </TouchableOpacity>
-                </View>
+                                <FormInput style={styles.text}
+                                    name='Name'
+                                    value={values.Name}
+                                    onChangeText={handleChange('Name')}
+                                    iconName='ios-person'
+                                    iconColor='#2C384A'
+                                    onBlur={handleBlur('Name')}
+                                />
+                                <ErrorMessage errorValue={touched.Name && errors.Name} />
+
+                                <FormInput style={styles.welcome}
+                                    name='email'
+                                    value={values.email}
+                                    editable = {false}
+                                    onChangeText={handleChange('email')}
+                                    autoCapitalize='none'
+                                    iconName='ios-mail'
+                                    iconColor='white'
+                                    onBlur={handleBlur('email')}
+                                />
+                                <ErrorMessage errorValue={touched.email && errors.email} />
+
+                                <FormInput
+                                    name='DOB'
+                                    value={values.DOB}
+                                    onChangeText={handleChange('DOB')}
+                                    iconName='ios-calendar'
+                                    iconColor='#2C384A'
+                                    onBlur={handleBlur('DOB')}
+                                />
+                                <ErrorMessage errorValue={touched.DOB && errors.DOB} />
+
+                                <FormInput style={styles.text}
+                                    name='Address'
+                                    value={values.Address}
+                                    onChangeText={handleChange('Address')}
+                                    iconName='ios-home'
+                                    iconColor='#2C384A'
+                                    onBlur={handleBlur('Address')}
+                                />
+                                <ErrorMessage errorValue={touched.Address && errors.Address} />
+
+                                <TouchableOpacity style={styles.button} //Log in
+                                    onPress={handleSubmit}>
+                                    <Text>Update account</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.button} //Log in
+                                    onPress={this.logout}>
+                                    <Text>Logout</Text>
+                                </TouchableOpacity>
+
+                            </View>
+                        )}
+                </Formik>
             </KeyboardAvoidingView>
         )
     }
 }
+export default withNavigation(withUserContext(Profile))
 
 
 
