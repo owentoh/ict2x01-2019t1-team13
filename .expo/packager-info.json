@@ -1,10 +1,10 @@
 {
+  "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
   "packagerPid": 36432,
   "expoServerNgrokUrl": "https://fz-pt4.anonymous.ict2x01-2019t1-team13.exp.direct",
   "packagerNgrokUrl": "https://packager.fz-pt4.anonymous.ict2x01-2019t1-team13.exp.direct",
   "ngrokPid": 30592,
-  "webpackServerPort": null,
-  "devToolsPort": 19002
+  "webpackServerPort": null
 }

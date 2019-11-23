@@ -43,6 +43,12 @@ class Shop extends Component {
         });
       this.setState({equipmentList: returnArray, loading: false});        
     }.bind(this));
+
+    const docUserProfile = db.collection("Game").doc(this.props.userProvider.userDetails);
+    docUserProfile.get().then(doc => this.setState({ runes: doc.data().Runes }));
+    console.log(this.props.userProvider.userDetails)
+
+    
   }
   
   renderEquipment = (data) => {
@@ -60,7 +66,6 @@ class Shop extends Component {
       //this.checkRunes();
       const db = firebase.firestore();
       const docUserProfile = db.collection("Game").doc(email);
-      docUserProfile.get().then(doc => this.setState({ runes: doc.data().Runes }));
 
       //this.getEquipmentPrice();
       const docEquipment = db.collection("Equipment").doc(equipment);
@@ -74,7 +79,7 @@ class Shop extends Component {
 
         //this.addEquipmentToInventory();
         //docUserProfile.update({ Inventory: firebase.firestore.FieldValue.arrayUnion(equipment) });
-        docUserProfile.collection("inventory").doc(equipment).set({name: equipment, itemStatus: false, damage: this.state.damage, cost: this.state.price });
+        docUserProfile.collection("inventory").doc(equipment).set({name: equipment, itemStatus: "Unequipped", damage: this.state.damage, cost: this.state.price });
 
         //this.showPurchaseSuccess();
         Alert.alert("You have successfully purchased the item");
