@@ -19,7 +19,7 @@ export class UserProvider extends React.Component {
         currentStepCount: 0,
         hp: 1000,
         increaseStep: 0,
-        userLoggedin: true
+        userLoggedin: false
     };
 
 
@@ -105,15 +105,9 @@ export class UserProvider extends React.Component {
         this.setState({journeyStarted: toggle})
     }
 
-    // equip(name) {
-    //     firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").doc(name).update({ itemStatus: true });
-    //     Alert.alert("You have successfully equip the item");
-    // }
-
-    // unequip(name) {
-    //     firebase.firestore().collection("Game").doc("Toh_jin_wen@hotmail.com").collection("inventory").doc(name).update({ itemStatus: false });
-    //     Alert.alert("You have successfully unequip the item");
-    // }
+    setUserLoggedin = (toggle) => {
+        this.setState({userLoggedin: toggle})
+    }
 
     getValues = () => {
         return {
@@ -127,15 +121,13 @@ export class UserProvider extends React.Component {
             increaseStep: this.state.increaseStep,
             userLoggedin: this.state.userLoggedin,
 
-            
-
 
             setUserDetails : this.setUserDetails,
             setContextData : this.setContextData,
             setJourneyStarted : this.setJourneyStarted,
             setTotalDamage : this.setTotalDamage,
-            equip : this.equip,
-            unequip : this.unequip
+            setUserLoggedin : this.setUserLoggedin,
+
         }
     }
 
