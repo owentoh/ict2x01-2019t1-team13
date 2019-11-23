@@ -28,7 +28,8 @@ class Shop extends Component {
       equipmentList : [],
       loading: true,
       damage: 0,
-      totalDamage: 0
+      totalDamage: 0,
+      url: " "
     }
   }
 
@@ -71,6 +72,9 @@ class Shop extends Component {
       const docEquipment = db.collection("Equipment").doc(equipment);
       docEquipment.get().then(doc => this.setState({ price: doc.data().cost }));
       docEquipment.get().then(doc => this.setState({ damage: doc.data().damage }));
+      //docEquipment.get().then(doc => this.setState({ url: doc.data().url }));
+
+
       
 
       if (this.state.runes >= this.state.price) {

@@ -80,6 +80,7 @@ class gmaptest extends Component {
             if(currentToDestDistance<300){
                 Alert.alert("Congratulations","Your route has ended!");
                 this.props.userProvider.setJourneyStarted(false);
+                this.props.userProvider.setTotalDamage(this.props.userProvider.totalDamage / 1.5)
                 this.state.coordinates.pop();
                 this.state.coordinates.pop();
             }

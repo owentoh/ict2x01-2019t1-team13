@@ -56,12 +56,12 @@ class Inventory extends Component {
   }
 
   equip(name) {
-    firebase.firestore().collection("Game").doc(this.props.userProvider.userDetails).collection("inventory").doc(name).update({ itemStatus: true });
+    firebase.firestore().collection("Game").doc(this.props.userProvider.userDetails).collection("inventory").doc(name).update({ itemStatus: "Equipped" });
     Alert.alert("You have successfully equip the item");
   }
 
   unequip(name) {
-    firebase.firestore().collection("Game").doc(this.props.userProvider.userDetails).collection("inventory").doc(name).update({ itemStatus: false });
+    firebase.firestore().collection("Game").doc(this.props.userProvider.userDetails).collection("inventory").doc(name).update({ itemStatus: "Unequipped" });
     Alert.alert("You have successfully unequip the item");
   }
 
