@@ -28,7 +28,8 @@ class Shop extends Component {
       equipmentList : [],
       loading: true,
       damage: 0,
-      totalDamage: 0
+      totalDamage: 0,
+      url: " "
     }
   }
 
@@ -52,34 +53,45 @@ class Shop extends Component {
   }
   
   renderEquipment = (data) => {
+// <<<<<<< haikalBranch
     return <TouchableOpacity style={{ backgroundColor: '#fefefe' }} onPress={() => this.purchaseEquipment(this.props.userProvider.userDetails, data.item.name)}>
       <View style={styles.listItemContainer}>
+// =======
+//     return <TouchableOpacity style={{ backgroundColor: '#eeeeee' }} onPress={() => this.purchaseEquipment(this.props.userProvider.userDetails, data.item.name, data.item.cost, data.item.damage)}>
+//       <View style={styles.card}>
+//       {/* <View style={styles.listItemContainer}> */}
+// >>>>>>> dev
         <Image source={require("../Images/plasticsword.png")} styles={styles.equipmentImage} />
-        <Text style={styles.itemHeader}>{data.item.name}</Text>
-        <Text>Cost: {data.item.cost} Runes</Text>
-        <Text>Damage: {data.item.damage}</Text>
+          <View style={styles.cardContent}>
+            <Text style={styles.itemHeader}>Name: {data.item.name}</Text>
+            <Text>Cost: {data.item.cost} Runes</Text>
+            <Text>Damage: {data.item.damage}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   }
 
-  purchaseEquipment = (email, equipment) => {
+  purchaseEquipment = (email, equipment, cost, damage) => {
       //this.checkRunes();
       const db = firebase.firestore();
       const docUserProfile = db.collection("Game").doc(email);
 
       //this.getEquipmentPrice();
       const docEquipment = db.collection("Equipment").doc(equipment);
-      docEquipment.get().then(doc => this.setState({ price: doc.data().cost }));
-      docEquipment.get().then(doc => this.setState({ damage: doc.data().damage }));
+      //docEquipment.get().then(doc => this.setState({ price: doc.data().cost }));
+      //docEquipment.get().then(doc => this.setState({ damage: doc.data().damage }));
+      //docEquipment.get().then(doc => this.setState({ url: doc.data().url }));
+
+
       
 
       if (this.state.runes >= this.state.price) {
         //this.minusRunes();
-        docUserProfile.update({ Runes: firebase.firestore.FieldValue.increment(-(this.state.price)) });
+        docUserProfile.update({ Runes: firebase.firestore.FieldValue.increment(-(cost)) });
 
         //this.addEquipmentToInventory();
         //docUserProfile.update({ Inventory: firebase.firestore.FieldValue.arrayUnion(equipment) });
-        docUserProfile.collection("inventory").doc(equipment).set({name: equipment, itemStatus: "Unequipped", damage: this.state.damage, cost: this.state.price });
+        docUserProfile.collection("inventory").doc(equipment).set({name: equipment, itemStatus: "Unequipped", damage: damage, cost: cost });
 
         //this.showPurchaseSuccess();
         Alert.alert("You have successfully purchased the item");
@@ -192,20 +204,43 @@ export default withUserContext(Shop);
 
 //Design of the page
 const styles = StyleSheet.create({
-  listItemContainer: {
-    fontSize: 15,
-    textAlign: 'center',
-    margin: 10,
-    color: 'white',
-    borderStyle: 'solid',
-    borderColor: '#fff',
-    borderBottomWidth: 2,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 20
+//   listItemContainer: {
+//     fontSize: 15,
+//     textAlign: 'center',
+//     margin: 10,
+//     color: 'white',
+//     borderStyle: 'solid',
+//     borderColor: '#fff',
+//     borderBottomWidth: 2,
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     padding: 20
+// },
+card:{
+  shadowColor: '#00000021',
+  shadowOffset: {
+    width: 0,
+    height: 30,
+    flex: 1,
+  },
+  shadowOpacity: 0.37,
+  shadowRadius: 7.49,
+  elevation: 12,
+
+  marginVertical: 10,
+  marginHorizontal:20,
+  backgroundColor:"white",
+  flexBasis: '46%',
+  padding: 10,
+  flexDirection:'row'
+},
+
+cardContent: {
+  marginLeft:20,
+  marginTop:10
 },
 itemHeader: {  
-    color: '#fff',
+    color: 'black',
     fontSize: 20,
 },
 equipmentImage: {
@@ -233,7 +268,6 @@ equipmentImage: {
     assert.equal(getEquipment(poorGuy).count, beforePurchaseInv);
     assert.equal(getLog(), "You do not have sufficient Runes");
   }
-
   testTwo(){
     var assert = require('assert');
     var beforePurchaseRunes = checkRunes(richGuy);
@@ -252,41 +286,34 @@ equipmentImage: {
     var assert = require('assert');
     assert.equal(listOfEquipment().count, 10);
   }
-
     testFour(){
       var assert = require('assert');
       assert.equal(addEquipmentToInventory("walkerKing93", "Gold sword"), );
     }
-
   
   testFive(){
     var assert = require('assert');
     assert.equal(getEquipmentPrice("Metal sword"), 5000);
   }
-
     testSix(){
       var assert = require('assert');
       assert.equal(checkRunes("walkerKing93"), 1000000);
     }
   
-
   
     testSeven(){ 
       var assert = require('assert');
       minusRunes("walkerKing93", 500000);
       assert.equal(checkRunes("walkerKing93"), 500000);
     }
-
     testEight(){
       var assert = require('assert');
       assert.equal(showPurchaseSuccess("You have successfully purchased the item"), "You have successfully purchased the item");
     }
-
     testEight(){
       var assert = require('assert');
       assert.equal(showPurchaseSuccess("You have successfully purchased the item"), "You have successfully purchased the item");
     }
-
   testNine(){
     var assert = require('assert');
     assert.equal(showPurchaseSuccess("You do not have sufficient Runes"), "You do not have sufficient Runes");
