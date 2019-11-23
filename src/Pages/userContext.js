@@ -15,6 +15,7 @@ export class UserProvider extends React.Component {
         stepCount: "hello",
         journeyStarted: false,
         userDetails: {},
+        damage:1,
         totalDamage: 1,
         currentStepCount: 0,
         hp: 1000,
@@ -28,7 +29,7 @@ export class UserProvider extends React.Component {
         interval = setInterval(() => {
             if (this.state.userLoggedin){
                 if (this.state.journeyStarted){
-                    this.setState({ totalDamage : this.state.totalDamage * 1.5})
+                    this.setState({ totalDamage : this.state.damage * 1.5})
                 }
                 console.log("my current damage", this.state.totalDamage)
                 if(this.state.increaseStep != 0){
@@ -93,6 +94,11 @@ export class UserProvider extends React.Component {
         this.setState({totalDamage: damage})
     }
 
+    setDamage = (damage) => {
+        this.setState({damage: damage})
+    }
+
+
     setUserDetails = (user) => {
         this.setState({userDetails: user});
     }
@@ -121,6 +127,7 @@ export class UserProvider extends React.Component {
             stepCount: this.state.stepCount,
             journeyStarted: this.state.journeyStarted,
             userDetails: this.state.userDetails,
+            damage:this.state.damage,
             totalDamage: this.state.totalDamage,
             currentStepCount: this.state.currentStepCount,
             hp: this.state.hp,
@@ -129,7 +136,7 @@ export class UserProvider extends React.Component {
 
             
 
-
+            setDamage : this.setDamage,
             setUserDetails : this.setUserDetails,
             setContextData : this.setContextData,
             setJourneyStarted : this.setJourneyStarted,
