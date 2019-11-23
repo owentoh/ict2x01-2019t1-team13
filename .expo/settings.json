@@ -1,6 +1,6 @@
 {
   "urlRandomness": "8r-qmk",
-  "hostType": "lan",
+  "hostType": "localhost",
   "lanType": "ip",
   "dev": true,
   "minify": false,
