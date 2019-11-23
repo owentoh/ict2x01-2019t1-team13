@@ -20,8 +20,11 @@ class Mainpage extends Component {
     //static contextType = UserProvider;
 
     componentDidMount(){
-        //Retrieve equipment damage
+        //successfully login
+        this.props.userProvider.setUserLoggedin(true)
         user = firebase.auth().currentUser.email;
+
+        //Retrieve equipment damage
         this.props.userProvider.setUserDetails(user)
         const db = firebase.firestore();
         db.collection("Game").doc(user).collection("inventory").get().then(function (query) {
@@ -33,7 +36,6 @@ class Mainpage extends Component {
             })
             this.props.userProvider.setTotalDamage(countDamage)
         }.bind(this));
-        this.props.userProvider.setUserLoggedin(true)
     }
 
 
