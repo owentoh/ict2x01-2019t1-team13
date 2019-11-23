@@ -6,6 +6,7 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import firebase from 'firebase'
 import {UserProvider,withUserContext} from '../Pages/userContext';
+import {getDistance} from 'geolib'
 
 require("firebase/firestore");
 // import { Pedometer } from "expo-sensors";
@@ -39,6 +40,7 @@ class gmaptest extends Component {
             ],
             
             noteArrayCoord:[],
+            noteArray:[],
             currentLocation: {latitude:0,longitude:0},
             location: null,
             errorMessage: null,
@@ -62,42 +64,58 @@ class gmaptest extends Component {
     //   };
 
     async componentWillUpdate() {//will keep running update mapview here
-    //     this.watchId = navigator.geolocation.watchPosition(
-    //         (position) => {
-    //             this.setState({
-    //                 currentLocation: {
-    //                     latitude: position.coords.latitude,
-    //                     longitude: position.coords.longitude
-    //                 },
-    //             })
-    //             // currentCamera = this.mapView.getCamera() ? this.mapView.getCamera() : this.state.camera
-    //             // console.log(currentCamera);
-    //             // this.mapView.setCamera={camera = currentCamera}
-    //             console.log(position.coords.latitude +":"+ position.coords.longitude)
-    //         },
-    //         (error)=>{
-    //             this.setState({currentLocationErr:error.message})
-    //         },
-    //         {enableHighAccuracy: true, timeout:1, maximumAge:1, distanceFilter:1 }
-    //     )
-    //     // this.spin()
-        this._getLocationAsync;
-        console.log(this.state.errorMessage);
+        //Keep getting distance. and check if its near the end location
+        if(this.state.coordinates.length>1 && this.props.userProvider.journeyStarted){
+            //keep checking if im near the destination location:
+            let geoOptions = {
+                enableHighAccuracy: true,
+                timeOut: 20000,
+                maximumAge: 60 * 60
+              };
+              //this.setState({ ready: false, error: null });
+              navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoFailure, geoOptions);
+             
+            var currentToDestDistance = getDistance(this.state.coordinates[1],this.state.currentLocation);
+            if(currentToDestDistance<300){
+                Alert.alert("Congratulations","Your route has ended!");
+                this.props.userProvider.setJourneyStarted(false);
+            }
+        }
+     
     }
+
+    geoSuccess = (position) => {
+    
+        this.setState({
+          ready: true,
+          currentLocation: {latitude:position.coords.latitude,longitude:position.coords.longitude},
+        //   lat: position.coords.latitude, 
+        //   lng: position.coords.longitude,
+        })
+      }
+      geoFailure = (err) => {
+        this.setState({ error: err.message });
+      }
 
     async updateNoteState(){
         const db = firebase.firestore();
         await db.collection("Notes").get().then(function (query) {
             var returnArray = []
+            var dataArray = []
             query.forEach(function (doc) {
               var item = doc.data();
               tbp = {latitude:item.lat, longitude:item.lng};
               returnArray.push(tbp);
-              });
+              dataArray.push(item);
+            //   console.log(item);
               
-
-            this.setState({noteArrayCoord: returnArray, loading: false});     
-            console.log(this.state.noteArrayCoord) 
+            });
+              
+            
+            this.setState({noteArrayCoord: returnArray,
+                            loading: false,
+                        noteArray:dataArray});     
+            console.log(this.state.noteArray) 
           }.bind(this));
     }
 
@@ -125,6 +143,7 @@ class gmaptest extends Component {
 
         }
     };
+
     
     //For calculating initial region
     regionFrom(lat, lon, distance=4000) {
@@ -235,8 +254,15 @@ class gmaptest extends Component {
                     
                     {this.state.noteArrayCoord.map((coordinate, index) => (
                         <MapView.Marker key={`noteCoordinate_${index}`} coordinate={coordinate} 
-                        image={require('../Images/note.png')} />
+                        image={require('../Images/note.png')}>
+                            <MapView.Callout >
+                                <View style={styles.calloutText}>
+                                    <Text>{this.state.noteArray[index].message}</Text>
+                                </View>
+                            </MapView.Callout>
+                        </MapView.Marker>
                     ))}
+
                     {this.state.coordinates.length >= 2 && (
 
                         <MapViewDirections
@@ -284,13 +310,7 @@ class gmaptest extends Component {
                         />
                     )}
 
-                    <MapView.Marker
-                        coordinate={this.state.currentLocation} >
-                            <View style={styles.radius}>
-                                <View style = {styles.marker}/>
-                                
-                            </View>
-                        </MapView.Marker>
+                    
                         
                 </MapView>
             </View>
