@@ -9,7 +9,6 @@ export default class PreLoading extends React.Component {
         firebase.auth().onAuthStateChanged(user => {
             this.props.navigation.navigate(user ? "Mainpage" : "Login")
         })
-        
     }
     render() {
         return null;
