@@ -20,7 +20,8 @@ export class UserProvider extends React.Component {
         currentStepCount: 0,
         hp: 1000,
         increaseStep: 0,
-        userLoggedin: false
+        userLoggedin: false,
+        userRole:" "
     };
 
 
@@ -95,6 +96,9 @@ export class UserProvider extends React.Component {
         this.setState({damage: damage})
     }
 
+    setUserRole = (userRole) => {
+        this.setState({userRole: userRole})
+    }
 
     setUserDetails = (user) => {
         this.setState({userDetails: user});
@@ -133,6 +137,7 @@ export class UserProvider extends React.Component {
             setJourneyStarted : this.setJourneyStarted,
             setTotalDamage : this.setTotalDamage,
             setUserLoggedin : this.setUserLoggedin,
+            setUserRole: this.setUserRole
 
         }
     }

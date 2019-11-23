@@ -18,6 +18,7 @@ import Profile from './src/Pages/Profile'
 import Shop from './src/Pages/Shop'
 import Loading from './src/Pages/Loading'
 import PreLoading from './src/Pages/PreLoading';
+import AdminNotes from './src/Pages/AdminNotes';
 
 export default class App extends Component {
   render() {
@@ -66,6 +67,12 @@ const AppTab = createBottomTabNavigator(
     },
     Profile: {
       screen: Profile,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
+      }
+    },
+    AdminNotes: {
+      screen: AdminNotes,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
       }

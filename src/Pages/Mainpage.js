@@ -37,6 +37,13 @@ class Mainpage extends Component {
             this.props.userProvider.setTotalDamage(countDamage)
         }.bind(this));
 
+        //Determine whether user is admin or player
+        db.collection("Users").doc(user).get()
+        .then(doc => {
+            console.log(doc.data().Role)
+            this.props.userProvider.setUserRole(doc.data().Role);
+        })
+
         db.collection("Game").doc(user).get()
             .then(doc => {
                 this.handleCurrentStepslocalstate(doc.data().CurrentSteps);
