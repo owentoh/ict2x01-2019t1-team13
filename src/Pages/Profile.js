@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
     StyleSheet,
-    Text,
     View,
     Image,
     TextInput,
@@ -9,6 +8,8 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
+import { Container, Tab, TabHeading, Tabs, StyleProvider, Icon, Title, Header, Left, Body, Right, Button, Text} from 'native-base';
+
 
 import { withNavigation } from 'react-navigation';
 import { UserProvider, withUserContext } from "./userContext";
@@ -155,7 +156,24 @@ class Profile extends Component {
 
     render() {
         return (
+            <Container>
             <KeyboardAvoidingView style={styles.container} behavior="padding">
+            <Header>
+          <Left>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Icon name='arrow-back' />
+              <Text>Back</Text>
+            </Button>
+          </Left>
+          <Body>
+            <Title>Profile</Title>
+          </Body>
+          <Right>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Text>Cancel</Text>
+            </Button>
+          </Right>
+        </Header>
                 <Formik
                     enableReinitialize={true}
                     initialValues={{
@@ -254,6 +272,7 @@ class Profile extends Component {
                         )}
                 </Formik>
             </KeyboardAvoidingView>
+            </Container>
         )
     }
 }

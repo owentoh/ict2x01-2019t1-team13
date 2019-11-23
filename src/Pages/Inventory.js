@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import {
   StyleSheet,
-  Text,
   View,
   TextInput,
   KeyboardAvoidingView,
@@ -15,7 +14,7 @@ import {
 } from 'react-native';
 import firebase from 'firebase'
 import {UserProvider,withUserContext} from './userContext';
-import { Separator } from 'native-base';
+import { Separator, Container, Tab, TabHeading, Tabs, StyleProvider, Icon, Title, Header, Left, Body, Right, Button, Text} from 'native-base';
 import Constants from 'expo-constants';
 
 require("firebase/firestore");
@@ -129,13 +128,37 @@ class Inventory extends Component {
   render() {
       if (!this.state.loading){
         return (  
-          <View style={styles.container}>
+// <<<<<<< haikalBranch
+          <Container>
+          <Header>
+          <Left>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Icon name='arrow-back' />
+              <Text>Back</Text>
+            </Button>
+          </Left>
+          <Body>
+            <Title>Inventory</Title>
+          </Body>
+          <Right>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Text>Cancel</Text>
+            </Button>
+          </Right>
+        </Header>
+// =======
+//           <View style={styles.container}>
+// >>>>>>> dev
               <FlatList 
           data={this.state.equipmentList}
           renderItem={this.renderEquipment}
           keyExtractor={(item) => item.name} 
-          />
-          </View>)
+// <<<<<<< haikalBranch
+          /></Container>)
+// =======
+//           />
+//           </View>)
+// >>>>>>> dev
       }
       else {
         return (<ActivityIndicator/>)

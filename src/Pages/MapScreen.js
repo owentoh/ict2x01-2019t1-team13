@@ -1,9 +1,11 @@
 import React from 'react';
-import {Platform, StyleSheet, Text, KeyboardAvoidingView,TextInput,TouchableOpacity, Alert, View } from 'react-native';
+import {Platform, StyleSheet, KeyboardAvoidingView,TextInput,TouchableOpacity, Alert, View } from 'react-native';
 import Gmaptest from '../component/gmaptest'
 import Pedometer from '../component/pedometer'
 import Createnote from '../component/createNote'
 import {UserProvider,withUserContext} from '../Pages/userContext';
+import { Container, Tab, TabHeading, Tabs, StyleProvider, Icon, Title, Header, Left, Body, Right, Button, Text} from 'native-base';
+
 
 class MapScreen extends React.Component {
 
@@ -39,8 +41,25 @@ class MapScreen extends React.Component {
       const statusbar = (Platform.OS == 'ios') ? <View style = {styles.iosstatusbar}></View> :<View style = {styles.androidstatusbar}></View>
       
     return (
-
+      <Container>
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
+
+      <Header>
+          <Left>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Icon name='arrow-back' />
+              <Text>Back</Text>
+            </Button>
+          </Left>
+          <Body>
+            <Title>Map</Title>
+          </Body>
+          <Right>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Text>Cancel</Text>
+            </Button>
+          </Right>
+        </Header>
 
         {statusbar}
 
@@ -56,6 +75,7 @@ class MapScreen extends React.Component {
         <Gmaptest updateStartEnd={this.updateStartEnd} ref={child => { this.child = child }} {...this.props} />
         <Createnote updateGmapNote={()=>this.child.updateNoteState()}/>
       </KeyboardAvoidingView>
+      </Container>
     );
   }
 }
