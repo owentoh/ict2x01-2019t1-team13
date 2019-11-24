@@ -22,6 +22,7 @@ export class UserProvider extends React.Component {
         increaseStep: 0,
         userLoggedin: false,
         userRole:" "
+        Role:"Player"
     };
 
 
@@ -116,6 +117,10 @@ export class UserProvider extends React.Component {
         this.setState({userLoggedin: toggle})
     }
 
+    setRole = (str)=>{
+        this.setState({Role:str})
+    }
+
     getValues = () => {
         return {
             contextData: this.state.contextData,
@@ -128,9 +133,10 @@ export class UserProvider extends React.Component {
             hp: this.state.hp,
             increaseStep: this.state.increaseStep,
             userLoggedin: this.state.userLoggedin,
-
+            role:this.state.Role,
+            userRole: this.state.userRole,
             
-
+            setRole:this.setRole,
             setDamage : this.setDamage,
             setUserDetails : this.setUserDetails,
             setContextData : this.setContextData,

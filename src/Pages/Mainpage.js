@@ -43,6 +43,8 @@ class Mainpage extends Component {
             console.log(doc.data().Role)
             this.props.userProvider.setUserRole(doc.data().Role);
             this.forceUpdate()
+        db.collection("Users").doc(user).get().then(doc=>{
+            this.props.userProvider.setRole(doc.data().Role);
         })
 
         db.collection("Game").doc(user).get()

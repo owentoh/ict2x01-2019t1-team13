@@ -16,24 +16,28 @@ class AdminNotes extends Component {
     }
   }
 
-  componentDidMount(){
+  async componentWillMount(){
     const db = firebase.firestore();
-    db.collection("Notes").get().then(function (query) {
+    await db.collection("Notes").get().then(function (query) {
       var returnArray = []
       query.forEach(function (doc) {
         var note = doc.data();
+        note.id = doc._document.key.path.segments[doc._document.key.path.segments.length-1]
         returnArray.push(note);
-        });
-      this.setState({noteList: returnArray, loading: false});        
+        // console.log(doc._document.key.path.segments[doc._document.key.path.segments.length-1]);
+      });
+      this.setState({noteList: returnArray, loading: false});
+      
     }.bind(this));
   }
   
   renderNotes = (data) => {
     return <View>
       <View style={styles.noteContainer}>
-        <Text>{data.note.doc}</Text>
-        <Text>{data.note.message}</Text>
-        <Button title="Delete" onPress={() => this.delete(data.note.doc)} />
+        {/* <Text>{data.note.doc}</Text> */}
+        <Text>{data.item.id}:</Text>
+        <Text>{data.item.message}</Text>
+        <Button title="Delete" onPress={() => this.delete(data.item.id)} />
       </View>
     </View>
   }
@@ -49,7 +53,7 @@ class AdminNotes extends Component {
               <FlatList 
                 data={this.state.noteList}
                 renderItem={this.renderNotes}
-                keyExtractor={(note) => note.name} 
+                keyExtractor={(note,index) => "listkey"+index} 
           />)
       }
       else {

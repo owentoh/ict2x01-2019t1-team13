@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Alert, Button, TextInput, View, StyleSheet, Text } from 'react-native';
 import firebase from '../Pages/firestoreReference';
+import AdminNotes from '../Pages/AdminNotes';
 require("firebase/firestore");
 
 class CreateNotes extends React.Component {
@@ -16,10 +17,17 @@ class CreateNotes extends React.Component {
       lat: null, 
       lng: null,
       error: null,
+      role:'Player'
     };
   }
 
+
+
   componentDidMount() {
+    // this.setState({role:this.props.userProvider.Role})
+    console.log("SPARTA");
+    console.log(this.state.role);
+    console.log("SPARTA");
     var that = this;
     var date = new Date().getDate(); //Current Date
     var month = new Date().getMonth() + 1; //Current Month
@@ -76,6 +84,12 @@ class CreateNotes extends React.Component {
   }
 
   render() {
+    // const adminbutton = this.state.role=="Admin"?
+    // <Button
+    //       title={'Submit'}
+    //       style={styles.input}
+    //       // onPress={this.createNote.bind(this)}
+    //     />:<View></View>
     return (
       <View style={styles.container}>
         {/* <Text 
@@ -111,6 +125,7 @@ class CreateNotes extends React.Component {
           style={styles.input}
           onPress={this.createNote.bind(this)}
         />
+        {/* {adminbutton} */}
       </View>
     );
   }
