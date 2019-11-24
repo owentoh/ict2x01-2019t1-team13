@@ -1,6 +1,6 @@
 {
   "urlRandomness": "fz-pt4",
-  "hostType": "lan",
+  "hostType": "tunnel",
   "lanType": "ip",
   "dev": true,
   "minify": false,

@@ -9,12 +9,12 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  //Button,
+  Button,
   Alert
 } from 'react-native';
 import firebase from 'firebase'
 import {UserProvider,withUserContext} from './userContext';
-import { Separator, Container, Tab, TabHeading, Tabs, StyleProvider, Icon, Title, Header, Left, Body, Right, Button, Text} from 'native-base';
+import { Separator, Container, Tab, TabHeading, Tabs, StyleProvider, Icon, Title, Header, Left, Body, Right, Text} from 'native-base';
 import Constants from 'expo-constants';
 
 require("firebase/firestore");
@@ -132,18 +132,13 @@ class Inventory extends Component {
           <Container>
           <Header>
           <Left>
-            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
-              <Icon name='arrow-back' />
-              <Text>Back</Text>
-            </Button>
+           
           </Left>
           <Body>
             <Title>Inventory</Title>
           </Body>
           <Right>
-            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
-              <Text>Cancel</Text>
-            </Button>
+          
           </Right>
         </Header>
 {/* // =======
