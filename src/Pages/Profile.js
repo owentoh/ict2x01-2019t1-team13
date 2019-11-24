@@ -156,24 +156,7 @@ class Profile extends Component {
 
     render() {
         return (
-            <Container>
             <KeyboardAvoidingView style={styles.container} behavior="padding">
-            <Header>
-          <Left>
-            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
-              <Icon name='arrow-back' />
-              <Text>Back</Text>
-            </Button>
-          </Left>
-          <Body>
-            <Title>Profile</Title>
-          </Body>
-          <Right>
-            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
-              <Text>Cancel</Text>
-            </Button>
-          </Right>
-        </Header>
                 <Formik
                     enableReinitialize={true}
                     initialValues={{
@@ -194,6 +177,23 @@ class Profile extends Component {
                         handleBlur,
                         isSubmitting,
                     }) => (
+                        <Container>
+                        <Header>
+                        <Left>
+                          <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+                            <Icon name='arrow-back' />
+                            <Text>Back</Text>
+                          </Button>
+                        </Left>
+                        <Body>
+                          <Title>Profile</Title>
+                        </Body>
+                        <Right>
+                          <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+                            <Text>Cancel</Text>
+                          </Button>
+                        </Right>
+                      </Header>
                             <View style={styles.container}>
                                 <Text style={styles.welcome}>Update account</Text>
                                 <FormInput
@@ -269,10 +269,10 @@ class Profile extends Component {
                                 </TouchableOpacity>
 
                             </View>
+                        </Container>
                         )}
                 </Formik>
             </KeyboardAvoidingView>
-            </Container>
         )
     }
 }
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#433a64',
+        backgroundColor: '#3D72A4',
     },
     inputbox:
     {

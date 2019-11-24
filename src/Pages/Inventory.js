@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import firebase from 'firebase'
 import {UserProvider,withUserContext} from './userContext';
-import { Separator, Container, Tab, TabHeading, Tabs, StyleProvider, Icon, Title, Header, Left, Body, Right, Button, Text} from 'native-base';
+import { Separator, Container, Tab, TabHeading, Tabs, StyleProvider, Icon, Title, Header, Left, Body, Right, Text, Button} from 'native-base';
 import Constants from 'expo-constants';
 
 require("firebase/firestore");
@@ -57,13 +57,30 @@ class Inventory extends Component {
         <Text style={styles.status}>Status: {data.item.itemStatus}</Text>
         <Text style={styles.status}>Damage: {data.item.damage}</Text>
         <Text style={styles.status}>Price: {data.item.cost}</Text>
-          <View style={styles.button}>
+          {/* <View style={styles.button}>
             <Button style={styles.equip} title="Equip" onPress={() => this.equip(data.item.name, data.item.damage)} />
             <Separator />
             <Button style={styles.unequip} title="Unequip" onPress={() => this.unequip(data.item.name, data.item.damage)} />
               <Separator />
             <Button style={styles.sell} title="Sell" onPress={() => this.sell(data.item.name, data.item.cost)} />
-          </View>
+          </View> */}
+          <View style={styles.cardButton}>
+                        <TouchableOpacity style={styles.sellButton} onPress={() => this.sell(data.item.name, data.item.cost)}>
+                            <Text style={styles.sellButtonText}>Sell</Text>                  
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.equipButton} onPress={() => this.equip(data.item.name, data.item.damage)}>
+                            <Text style={styles.equipButtonText}>Equip</Text>                  
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.unequipButton} onPress={() => this.unequip(data.item.name, data.item.damage)}>
+                            <Text style={styles.unequipButtonText}>Unequip</Text>                  
+                        </TouchableOpacity> 
+                   </View>
+
+
+
+
+
+
         </View>
       </View>
     </View>
@@ -132,18 +149,18 @@ class Inventory extends Component {
           <Container>
           <Header>
           <Left>
-            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
-              <Icon name='arrow-back' />
-              <Text>Back</Text>
-            </Button>
+          <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+                            <Icon name='arrow-back' />
+                            <Text>Back</Text>
+                          </Button>
           </Left>
           <Body>
             <Title>Inventory</Title>
           </Body>
           <Right>
-            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
-              <Text>Cancel</Text>
-            </Button>
+          <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+                            <Text>Cancel</Text>
+                          </Button>
           </Right>
         </Header>
 {/* // =======
@@ -272,6 +289,57 @@ separator: {
   marginVertical: 1,
   borderBottomColor: '#00000021',
   borderBottomWidth: StyleSheet.hairlineWidth,
+},
+sellButton: {
+  marginTop: 55,
+  height: 35,
+  width: 70,
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 30,
+  backgroundColor: "#433a64",
+},
+sellButtonText: {
+  color: "#FFFFFF",
+  fontSize: 20,
+},
+equipButton: {
+  marginTop: 55,
+  height: 35,
+  width: 80,
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 30,
+  backgroundColor: "#433a64",
+},
+equipButtonText: {
+  color: "#FFFFFF",
+  fontSize: 20,
+},
+unequipButton: {
+  marginTop: 55,
+  height: 35,
+  width: 95,
+  //flexDirection: 'row-reverse',
+  alignSelf: 'flex-end',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 30,
+  backgroundColor: "#433a64",
+},
+unequipButtonText: {
+  color: "#FFFFFF",
+  fontSize: 20,
+},
+cardButton: {
+  // marginLeft:0,
+  // marginTop: 10,
+  flexDirection: 'row',
+  textAlign: 'center',
+  //justifyContent: 'space-between',
+  //flexWrap: 'wrap',
 },
 
 });
