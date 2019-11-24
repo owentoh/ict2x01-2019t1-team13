@@ -23,3 +23,6 @@ https://www.lucidchart.com/invitations/accept/2b668b23-065a-4852-9288-03d4565652
 
 Google Feedback Form for users:
 https://forms.gle/fYVAJ1uXhA72Xgfg9
+
+## APK download
+https://drive.google.com/drive/folders/1qkQnjpS14Zlw5tMcbK58M9-4H5QpBvUD?usp=sharing
