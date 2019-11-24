@@ -177,6 +177,23 @@ class Profile extends Component {
                         handleBlur,
                         isSubmitting,
                     }) => (
+                        <Container>
+                        <Header>
+                        <Left>
+                          <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+                            <Icon name='arrow-back' />
+                            <Text>Back</Text>
+                          </Button>
+                        </Left>
+                        <Body>
+                          <Title>Profile</Title>
+                        </Body>
+                        <Right>
+                          <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+                            <Text>Cancel</Text>
+                          </Button>
+                        </Right>
+                      </Header>
                             <View style={styles.container}>
                                 <Text style={styles.welcome}>Update account</Text>
                                 <FormInput
@@ -252,6 +269,7 @@ class Profile extends Component {
                                 </TouchableOpacity>
 
                             </View>
+                        </Container>
                         )}
                 </Formik>
             </KeyboardAvoidingView>
