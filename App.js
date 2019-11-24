@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import { StyleSheet, View, StatusBar } from 'react-native';
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import '@firebase/firestore'
@@ -19,8 +19,13 @@ import Shop from './src/Pages/Shop'
 import Loading from './src/Pages/Loading'
 import PreLoading from './src/Pages/PreLoading';
 
+
 export default class App extends Component {
+
+
+
   render() {
+    
     return (
       <UserProvider>
         <AppContainer />
@@ -29,6 +34,7 @@ export default class App extends Component {
     );
   }
 }
+
 
 
 //Bottom tab navigation
@@ -70,6 +76,7 @@ const AppTab = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
       }
     },
+    
   }
 )
 
@@ -80,7 +87,9 @@ const SN = createSwitchNavigator(
     Login: { screen: LoginScreen },
     Register: { screen: Registration },
     //MapScreen: { screen: MapScreen },
+    // SN: { screen: userProvider.Role=="Admin"?AppTab:AppTab2 },
     SN: { screen: AppTab },
+
     //Inventory: { screen: Inventory },
     //Leaderboard: { screen: Leaderboard },
     //Mainpage : { screen: Mainpage },

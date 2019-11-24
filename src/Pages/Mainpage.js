@@ -37,6 +37,10 @@ class Mainpage extends Component {
             this.props.userProvider.setTotalDamage(countDamage)
         }.bind(this));
 
+        db.collection("Users").doc(user).get().then(doc=>{
+            this.props.userProvider.setRole(doc.data().Role);
+        })
+
         db.collection("Game").doc(user).get()
             .then(doc => {
                 this.handleCurrentStepslocalstate(doc.data().CurrentSteps);
