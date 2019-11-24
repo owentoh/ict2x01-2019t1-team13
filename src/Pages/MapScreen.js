@@ -1,9 +1,11 @@
 import React from 'react';
-import {Platform, StyleSheet, Text, KeyboardAvoidingView,TextInput,TouchableOpacity, Alert, View } from 'react-native';
+import {Platform, StyleSheet, KeyboardAvoidingView,TextInput,TouchableOpacity, Alert, View } from 'react-native';
 import Gmaptest from '../component/gmaptest'
 import Pedometer from '../component/pedometer'
 import Createnote from '../component/createNote'
 import {UserProvider,withUserContext} from '../Pages/userContext';
+import { Container, Tab, TabHeading, Tabs, StyleProvider, Icon, Title, Header, Left, Body, Right, Button, Text} from 'native-base';
+
 
 class MapScreen extends React.Component {
 
@@ -36,13 +38,30 @@ class MapScreen extends React.Component {
   }
 
   render() {
-      const statusbar = (Platform.OS == 'ios') ? <View style = {styles.iosstatusbar}></View> :<View style = {styles.androidstatusbar}></View>
+      // const statusbar = (Platform.OS == 'ios') ? <View style = {styles.iosstatusbar}></View> :<View style = {styles.androidstatusbar}></View>
       
     return (
-
+      <Container>
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
 
-        {statusbar}
+      <Header>
+          <Left>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Icon name='arrow-back' />
+              <Text>Back</Text>
+            </Button>
+          </Left>
+          <Body>
+            <Title>Map</Title>
+          </Body>
+          <Right>
+            <Button onPress={() => this.props.navigation.navigate('Mainpage')} transparent>
+              <Text>Cancel</Text>
+            </Button>
+          </Right>
+        </Header>
+
+        {/* {statusbar} */}
 
         <View style={styles.container2}>
           <Text style={flex = 1}>Start:</Text><TextInput clearTextOnFocus={true} autoFocus={true} onChangeText={a => this.setState({ input_start: a })} style={styles.searchInput} placeholder={this.state.input_start} value={this.state.input_start} />
@@ -56,6 +75,7 @@ class MapScreen extends React.Component {
         <Gmaptest updateStartEnd={this.updateStartEnd} ref={child => { this.child = child }} {...this.props} />
         <Createnote updateGmapNote={()=>this.child.updateNoteState()}/>
       </KeyboardAvoidingView>
+      </Container>
     );
   }
 }
@@ -68,7 +88,7 @@ const styles = StyleSheet.create({
   container2: {
     // flex:0,
     flexDirection:"row",
-    backgroundColor:'#48BBEC',
+    backgroundColor:'white',
     alignItems: 'center',
     justifyContent: 'center',
     color:'#fff',
@@ -90,8 +110,8 @@ const styles = StyleSheet.create({
   },
   button:{
     height:40,
-    backgroundColor:'black',
-    borderColor:'black',
+    backgroundColor:'#433a64',
+    borderColor:'#433a64',
     // marginLeft:10,
     // width:80,
     alignItems:'stretch',
@@ -109,7 +129,7 @@ const styles = StyleSheet.create({
     fontSize:18,
     borderWidth:1,
     color:'black',
-    borderColor:'#48BBEC',
+    borderColor:'white',
     borderRadius:1
   }
 });

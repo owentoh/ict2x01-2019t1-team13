@@ -124,23 +124,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#ecf0f1',
+    backgroundColor: 'white',
   },
   input: {
     width: 200,
     height: 44,
     padding: 10,
     borderWidth: 1,
-    borderColor: 'black',
-    marginBottom: 10,
+    borderColor: '#433a64',
+    marginBottom: 5,
+    marginTop: 5
   },
   inputM: {
     width: 300,
     height: 100,
     padding: 10,
     borderWidth: 1,
-    borderColor: 'black',
-    marginBottom: 10,
+    borderColor: '#433a64',
+    marginBottom: 2,
+    marginTop: 2,
+
   },
   headerText: {
     paddingTop: 50,
