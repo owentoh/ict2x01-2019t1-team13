@@ -88,7 +88,7 @@ export default class LeaderboardDamage extends React.Component {
             <View style={styles.leaderboardDetails}>
             <View style={styles.tableHeaderContainer}>
             <View style={styles.tableHeaderContainer1}><Text style={styles.textTableHeader1}>Username</Text></View>
-            <View style={styles.tableHeaderContainer2}><Text style={styles.textTableHeader2}>Total Damage</Text></View>
+            <View style={styles.tableHeaderContainer2}><Text style={styles.textTableHeader2}>Total Exp</Text></View>
             </View>
             <FlatList
               data={this.state.gamePosts}
