@@ -142,7 +142,8 @@ class Shop extends Component {
           data={this.state.equipmentList}
           renderItem={this.renderEquipment}
           keyExtractor={(item) => item.name} 
-          /></Container>)
+          />
+          </Container>)
       }
       else {
         return (<ActivityIndicator/>)
@@ -154,18 +155,18 @@ export default withUserContext(Shop);
 
 //Design of the page
 const styles = StyleSheet.create({
-//   listItemContainer: {
-//     fontSize: 15,
-//     textAlign: 'center',
-//     margin: 10,
-//     color: 'white',
-//     borderStyle: 'solid',
-//     borderColor: '#fff',
-//     borderBottomWidth: 2,
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     padding: 20
-// },
+   listItemContainer: {
+     fontSize: 15,
+     textAlign: 'center',
+     margin: 10,
+     color: 'white',
+     borderStyle: 'solid',
+     borderColor: '#fff',
+     borderBottomWidth: 2,
+     flexDirection: 'row',
+     //justifyContent: 'space-between',
+     padding: 20
+ },
 card:{
   shadowColor: '#00000021',
   shadowOffset: {

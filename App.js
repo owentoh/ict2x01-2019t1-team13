@@ -37,7 +37,7 @@ const AppTab = createBottomTabNavigator(
     Leaderboard: {
       screen: Leaderboard,
       navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-trophy" size={24} color={tintColor} />
+        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-podium" size={24} color={tintColor} />
       }
     },
     Shop: {
