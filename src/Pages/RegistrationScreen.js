@@ -70,6 +70,7 @@ class Registration extends Component {
       Email: '',
       Password: '',
       Datecreated: '',
+      Role: 'Player',
 
       //Game profile stats
       Damage: 0,
@@ -161,7 +162,8 @@ class Registration extends Component {
             DOB: this.state.DOB,
             Email: this.state.Email,
             Address: this.state.Address,
-            Datecreated: this.state.Datecreated
+            Datecreated: this.state.Datecreated,
+            Role: this.state.Role
           });
         db.collection('Game').doc(values.email).set(
           {

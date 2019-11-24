@@ -21,6 +21,7 @@ export class UserProvider extends React.Component {
         hp: 1000,
         increaseStep: 0,
         userLoggedin: false,
+        userRole:" "
         Role:"Player"
     };
 
@@ -96,6 +97,9 @@ export class UserProvider extends React.Component {
         this.setState({damage: damage})
     }
 
+    setUserRole = (userRole) => {
+        this.setState({userRole: userRole})
+    }
 
     setUserDetails = (user) => {
         this.setState({userDetails: user});
@@ -130,6 +134,7 @@ export class UserProvider extends React.Component {
             increaseStep: this.state.increaseStep,
             userLoggedin: this.state.userLoggedin,
             role:this.state.Role,
+            userRole: this.state.userRole,
             
             setRole:this.setRole,
             setDamage : this.setDamage,
@@ -138,6 +143,7 @@ export class UserProvider extends React.Component {
             setJourneyStarted : this.setJourneyStarted,
             setTotalDamage : this.setTotalDamage,
             setUserLoggedin : this.setUserLoggedin,
+            setUserRole: this.setUserRole
 
         }
     }
