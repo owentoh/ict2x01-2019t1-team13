@@ -44,6 +44,8 @@ class AdminNotes extends Component {
   }
 
   render() {
+
+    
       if (!this.state.loading){
         return (  
               <FlatList 
