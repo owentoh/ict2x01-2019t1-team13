@@ -12,11 +12,13 @@ The purpose of this file is to introduce the final Component Diagram, User Stey-
 
 
 ## Step-by-step Guide
-
-
-
-
-
+1. Install Expo application on your ios/android device from appstore or playstore (Application development tool)
+2. Clone the master branch from git hub 
+3. Install all depenencies at the root directory with npm install command
+4. Run the application on the root directory with expo start or npm start command
+5. Scan the QR Code from your phone that appeared while running the application
+(make sure the connections on your PC and Phones are on the same network)
+6. The application will be able to run. 
 
 
 ## Feedback Form
