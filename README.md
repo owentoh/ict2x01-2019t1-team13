@@ -12,7 +12,7 @@ The purpose of this file is to introduce the final Component Diagram, User Stey-
 
 
 ## Step-by-step Guide
-- Run from Expo
+- Run from Expo ios/android devices
 1. Install Expo application on your ios/android device from appstore or playstore (Application development tool)
 2. Clone the master branch from git hub 
 3. Install all depenencies at the root directory with npm install command
@@ -21,7 +21,7 @@ The purpose of this file is to introduce the final Component Diagram, User Stey-
 (make sure the connections on your PC and Phones are on the same network)
 6. The application will be able to run on your phone. 
 
-- Run from Android phone
+- Run from Android devices
 1. Download the APK file from the link below with your android device. (APK Download)
 2. Install the downloaded file
 3. The application will be found in your App drawer on your phone.
