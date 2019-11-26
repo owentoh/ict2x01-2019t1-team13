@@ -21,7 +21,7 @@ The purpose of this file is to introduce the final Component Diagram, User Stey-
 (make sure the connections on your PC and Phones are on the same network)
 6. The application will be able to run on your phone. 
 
--Run from Android phone
+- Run from Android phone
 1. Download the APK file from the link below with your android device. (APK Download)
 2. Install the downloaded file
 3. The application will be found in your App drawer on your phone.
