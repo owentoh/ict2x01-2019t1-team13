@@ -7,7 +7,7 @@ The main idea of our project is to encourage and instill walking to members of t
 The purpose of this file is to introduce the final Component Diagram, User Stey-by-step Guide on running this prototype app, a YouTube video url showcasing the prototype app and a Google Form url for Feedback form.
 
 ## Final Component Diagram
-https://www.lucidchart.com/invitations/accept/2b668b23-065a-4852-9288-03d45656528a
+![Component Diagram](readmeImage/UpdatedComponentDiagram.png)
 
 
 
