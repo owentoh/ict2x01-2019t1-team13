@@ -9,7 +9,8 @@ The purpose of this file is to introduce the final Component Diagram, User Stey-
 ## Final Component Diagram
 ![Component Diagram](readmeImage/UpdatedComponentDiagram.png)
 
-
+## Video Showcase
+https://www.youtube.com/watch?v=lAazZOskXFc
 
 ## Step-by-step Guide
 - Run from Expo iOS/Android devices
